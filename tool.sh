@@ -4,9 +4,9 @@ cd kernel&&
 rm main.o -f&&
 rm kernel.bin -f&&
 cd ..&&
-nasm -I include/ -o boot.bin boot.asm && 
+nasm -I include/ -o boot.bin ./boot/boot.asm && 
 dd if=./boot.bin of=/home/yaser/workspace/yaser.img bs=512 count=1  conv=notrunc&&
-nasm -I include/ -o loader.bin loader.asm && 
+nasm -I include/ -o loader.bin ./boot/loader.asm && 
 dd if=./loader.bin  of=/home/yaser/workspace/yaser.img bs=512 count=3 seek=2 conv=notrunc&&
 gcc -m32 -c -o kernel/main.o  kernel/main.c && 
 ld -m elf_i386 kernel/main.o -Ttext 0xc0001500 -e main -o kernel/kernel.bin && 
