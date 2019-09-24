@@ -1,0 +1,46 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "run",
+            "dependsOn":[
+                "build1",
+                "build2",
+                "link"
+            ]
+        },
+        {
+            "label": "build1",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-c",
+                "-o",
+                "./kernel/${fileBasenameNoExtension}.o",
+                "${file}"
+            ], // 命令参数
+        },
+        {
+            "label": "build2",
+            "type": "shell",
+            "command": "gcc",
+            "args": ["-g", "-o", "./kernel/${fileBasenameNoExtension}.out", "${file}"],  // 命令参数
+        },
+        {
+            "label": "link",
+            "type": "shell",
+            "command": "ld",
+            "args": [
+                "./kernel/${fileBasenameNoExtension}.o",
+                "-Ttext",
+                "0xc0001500",
+                "-e",
+                "main",
+                "-o",
+                "./kernel/${fileBasenameNoExtension}.bin",
+            ], // 命令参数
+        }
+    ]
+}
