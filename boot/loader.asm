@@ -283,7 +283,8 @@ ards_num     dw          0               ;记录ARDS结构体的数量
            kernel_entery:
             call .kernel_init
             mov esp,0xc009_f000        ;指定内核栈空间
-            jmp KERNEL_ENTRY_POINT
+
+            jmp dword [KERNEL_BIN_BASE_ADDR + 24]
         
             .kernel_init:               ;初始化内核，将kernel中的segment加载到编译地址
                 ;寄存器入栈
@@ -300,7 +301,6 @@ ards_num     dw          0               ;记录ARDS结构体的数量
                 mov dx,[KERNEL_BIN_BASE_ADDR + 42]      ;程序头表每个header的大小
                 mov ebx,[KERNEL_BIN_BASE_ADDR + 28]     ;程序头表中第一个program header的偏移地址
                 add ebx,KERNEL_BIN_BASE_ADDR
-
                 mov cx,[KERNEL_BIN_BASE_ADDR + 44]     ;header的个数
 
                 .each_segment:
