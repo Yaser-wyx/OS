@@ -42,21 +42,29 @@ static void idt_desc_table_init()
     }
     printf("idt_table init done!\n");
 }
-static void general_intr_handler(uint32_t vector_num)
+static void general_intr_handler(uint8_t vector_num)
 {
+    static long cnt = 0;
     //通用中断处理函数
     if (vector_num == 0x27 || vector_num == 0x2f)
     { //对于IRQ7与IRQ15不做处理
         return;
     }
-    printf("\ninterrupt occur! vector num is:");
-    printInt(vector_num);
+
+    cnt++;
+    if (cnt % 1000 == 0)
+    {
+        //降低显示的频率
+        cnt = 0;
+        printf("\ninterrupt occur! vector num is:");
+        printInt(vector_num);
+    }
 }
 static void exception_init()
 { //异常初始化
     for (int i = 0; i < IDT_CNT; i++)
     {
-        idt_table[i] = general_intr_handler;//指向中断处理程序
+        idt_table[i] = general_intr_handler; //指向中断处理程序
         intr_name[i] = "unknow";
     }
 
