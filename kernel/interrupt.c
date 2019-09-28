@@ -1,80 +1,65 @@
 #include "interrupt.h"
-#include "stdint.h"
 #include "global.h"
-#include "print.h"
 #include "io.h"
+#include "print.h"
+#include "stdint.h"
 
-#define PIC_M_CTRL 0x20 //主片控制端口
-#define PIC_M_DATA 0x21 //主片数据端口
-#define PIC_S_CTRL 0xa0 //从片控制端口
-#define PIC_S_DATA 0xa1 //从片数据端口
+#define IDT_CNT 33
+#define PIC_M_CTRL 0x20
+#define PIC_M_DATA 0x21
+#define PIC_S_CTRL 0xa0
+#define PIC_S_DATA 0xa1
 
-#define IDT_DESC_CNT 0x21                           //支持的中断数
-extern intr_handler intr_entry_table[IDT_DESC_CNT]; //声明引用kernel.asm中的中断处理函数数组
-char *intr_name[IDT_DESC_CNT];
-intr_handler idt_table[IDT_DESC_CNT];
+interrupt_handler idt_table[IDT_CNT];               //中断处理函数表
+char *intr_name[IDT_CNT];                           //中断处理函数名字
+extern interrupt_handler intr_entry_table[IDT_CNT]; //中断处理入口程序表
 
-//中断门描述符结构
-struct gate_desc
+struct idt_gate_desc //中断门描述符数据结构
 {
-    uint16_t func_offect_low_word;
-    uint16_t selector;
-    uint8_t dcount;
+    uint16_t intr_off_func_low;
+    uint16_t func_desc_selector;
+    uint8_t none;
     uint8_t attribute;
-    uint16_t func_offect_high_word;
-} static idt[IDT_DESC_CNT]; //声明全局中断门描述符数组
+    uint16_t intr_off_func_hight;
+} static idt_gate_desc_table[IDT_CNT]; //定义一个中断门描述符表
 
-static void make_idt_desc(struct gate_desc *p_gdesc, uint8_t attribute, intr_handler function)
+static void idt_desc_setup(struct idt_gate_desc *idt_desc, uint8_t attr, interrupt_handler func)
 {
-    p_gdesc->func_offect_low_word = (uint32_t)function & 0x0000ffff; //获取目标程序高16位地址
-    p_gdesc->selector = SELECTOR_K_CODE;
-    p_gdesc->dcount = 0;
-    p_gdesc->attribute = attribute;
-    p_gdesc->func_offect_high_word = ((uint32_t)function & 0xffff0000) >> 16;
+    //中断门描述符设置
+    idt_desc->intr_off_func_low = (uint32_t)func;
+    idt_desc->func_desc_selector = SELECTOR_K_CODE;
+    idt_desc->attribute = attr;
+    idt_desc->none = 0;
+    idt_desc->intr_off_func_hight = (uint32_t)func >> 16;
 }
-static void idt_desc_init(void)
+static void idt_desc_table_init()
 {
-    for (uint32_t i = 0; i < IDT_DESC_CNT; i++)
+    //中断描述符表设置
+    printf("init idt_desc\n");
+    for (int i = 0; i < IDT_CNT; i++)
     {
-        make_idt_desc(&idt[i], IDT_DESC_ATTR_DPL0, intr_entry_table[i]);
+        idt_desc_setup(&idt_gate_desc_table[i], IDT_DESC_ATTR_DPL0, intr_entry_table[i]);
     }
-    printf("idt_desc_init!\n\0");
+    printf("idt_table init done!\n");
 }
-static void pic_init(void)
+static void general_intr_handler(uint32_t vector_num)
 {
-    //设置主片
-    outb(PIC_M_CTRL, 0x11);
-    outb(PIC_M_DATA, 0x20);
-    outb(PIC_M_DATA, 0x04);
-    outb(PIC_M_DATA, 0x01);
-
-    //设置从片
-    outb(PIC_S_CTRL, 0x11);
-    outb(PIC_S_DATA, 0x28);
-    outb(PIC_S_DATA, 0x02);
-    outb(PIC_S_DATA, 0x01);
-
-    //打开主片的IR0
-    outb(PIC_M_DATA, 0xfe);
-    outb(PIC_S_DATA, 0xff);
-    printf("pic inint done!\n\0");
-}
-static void general_intr_handler(uint8_t vec_nr)
-{
-    if (vec_nr == 0x27 || vec_nr == 0x2f)
-    {
+    //通用中断处理函数
+    if (vector_num == 0x27 || vector_num == 0x2f)
+    { //对于IRQ7与IRQ15不做处理
         return;
     }
-    printf("\nint vector:");
-    printInt(vec_nr);
+    printf("\ninterrupt occur! vector num is:");
+    printInt(vector_num);
 }
-static void exception_init(void)
-{
-    for (int i = 0; i < IDT_DESC_CNT; i++)
+static void exception_init()
+{ //异常初始化
+    for (int i = 0; i < IDT_CNT; i++)
     {
-        idt_table[i] = general_intr_handler;
+        idt_table[i] = general_intr_handler;//指向中断处理程序
         intr_name[i] = "unknow";
     }
+
     intr_name[0] = "#DE Divide Error";
     intr_name[1] = "#DB Debug Exception";
     intr_name[2] = "NMI Interrupt";
@@ -96,16 +81,31 @@ static void exception_init(void)
     intr_name[18] = "#MC Machine-Check Exception";
     intr_name[19] = "#XF SIMD Floating-Point Exception";
 }
-//完成中断的初始化工作
-void idt_init()
+static void handle_pic_init()
 {
-    printf("idt_init start\n\0");
-    idt_desc_init();
-    exception_init();
-    pic_init();
-    //加载idt
-
-    uint64_t idt_operand = ((sizeof(idt) - 1) | (((uint64_t)(uint32_t)idt) << 16));
-    __asm__ volatile("lidt %0" ::"m"(idt_operand));
-    printf("idt_init done\n\0");
+    //设置主片
+    outb(PIC_M_CTRL, 0x11);
+    outb(PIC_M_DATA, 0x20);
+    outb(PIC_M_DATA, 0x04);
+    outb(PIC_M_DATA, 0x05);
+    //设置从片
+    outb(PIC_S_CTRL, 0x11);
+    outb(PIC_S_DATA, 0x28);
+    outb(PIC_S_DATA, 0x02);
+    outb(PIC_S_DATA, 0x01);
+    //开启指定中断号
+    outb(PIC_M_DATA, 0xfe);
+    outb(PIC_S_DATA, 0xff);
+    printf("8259A chip init done!\n");
+}
+void idt_init()
+{ //初始化中断描述符表
+    printf("start to init idt!\n");
+    idt_desc_table_init(); //中断描述符表初始化
+    exception_init();      //初始化所有的异常处理函数
+    handle_pic_init();     //初始化8259A芯片
+    //加载idt到idtr寄存器中
+    uint64_t idt = (sizeof(idt_gate_desc_table) - 1) | ((uint64_t)(uint32_t)idt_gate_desc_table << 16);
+    __asm__ volatile("lidt %0" ::"m"(idt));
+    printf("idt init done!\n");
 }

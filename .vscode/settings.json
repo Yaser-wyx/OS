@@ -4,7 +4,8 @@
         "stdint.h": "c",
         "global.h": "c",
         "interrupt.h": "c",
-        "init.h": "c"
+        "init.h": "c",
+        "io.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
