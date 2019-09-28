@@ -1,9 +1,12 @@
 #include "print.h"
-void main()
+#include "init.h"
+void main(void)
 {
     uint8_t *c = "kernel start ok!\n\0";
     printf(c);
-    printInt(12345);
+    init_all();
+    __asm__ volatile("sti"); // 为演示中断处理,在此临时开中断
+    printf("start to interrupt!\n");
     while (1)
     {
     }

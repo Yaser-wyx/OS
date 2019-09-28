@@ -1,5 +1,4 @@
-#include "stdint.h"
-void put_char(uint8_t char_asci);
+#include "print.h"
 
 void printf(uint8_t *str)
 {

@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "print.h": "c",
-        "stdint.h": "c"
-    }
+        "stdint.h": "c",
+        "global.h": "c",
+        "interrupt.h": "c",
+        "init.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }
