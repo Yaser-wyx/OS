@@ -10,6 +10,10 @@
 #define PIC_S_CTRL 0xa0
 #define PIC_S_DATA 0xa1
 
+#define EFLAGS_IF 0X00000200 //将eflags的if位置1
+#define GET_EFLAGS(eflags_value) __asm__ volatile("pushfl; popl %0" \
+                                                  : "=g"(eflags_value))
+
 interrupt_handler idt_table[IDT_CNT];               //中断处理函数表
 char *intr_name[IDT_CNT];                           //中断处理函数名字
 extern interrupt_handler intr_entry_table[IDT_CNT]; //中断处理入口程序表
@@ -116,4 +120,35 @@ void idt_init()
     uint64_t idt = (sizeof(idt_gate_desc_table) - 1) | ((uint64_t)(uint32_t)idt_gate_desc_table << 16);
     __asm__ volatile("lidt %0" ::"m"(idt));
     printf("idt init done!\n");
+}
+enum intr_status intr_disable()
+{
+    printf("disable intr");
+    if (get_intr_status() != INTR_OFF)
+    {
+        __asm__ volatile("cli" : : : "memory");
+    }
+    return INTR_OFF;
+}
+
+enum intr_status intr_enable()
+{
+    printf("enable intr");
+    if (get_intr_status() != INTR_ON)
+    {
+        __asm__ volatile("sti");
+    }
+    return INTR_ON;
+}
+
+enum intr_status get_intr_status()
+{
+    uint32_t eflags = 0;
+    GET_EFLAGS(eflags);
+    return (eflags & EFLAGS_IF) ? INTR_ON : INTR_OFF;
+}
+
+enum intr_status set_intr_status(enum intr_status status)
+{
+    return status & INTR_OFF ? intr_disable() : intr_enable();
 }
