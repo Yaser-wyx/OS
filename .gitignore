@@ -3,3 +3,4 @@ build/print.o
 build/init.o
 build/interrupt.o
 build/kernel.bin
+./.idea

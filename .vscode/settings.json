@@ -5,7 +5,11 @@
         "global.h": "c",
         "interrupt.h": "c",
         "init.h": "c",
-        "io.h": "c"
+        "io.h": "c",
+        "debug.h": "c",
+        "string.h": "c",
+        "bitmap.h": "c",
+        "memory.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
