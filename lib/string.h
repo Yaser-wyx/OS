@@ -8,4 +8,7 @@ char *strchr_first(const char *_src_, const char ch);
 char *strrchr(const char *_src_, const char ch);
 char *strcat(char *_dist_, const char *_src_);
 uint32_t strchrs(const char* str, uint8_t ch) ;
+void memset(void *_dist_, uint32_t size, uint32_t value);
+int memcmp(const void *dist, const void *src, uint32_t size);
+void memcpy(void *dist, const void *src, uint32_t size);
 #endif

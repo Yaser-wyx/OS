@@ -1,23 +1,20 @@
 #include "bitmap.h"
 #include "debug.h"
-#include "interrupt.h"
-#include "memory.h"
-#include "print.h"
-#include "stdint.h"
 #include "string.h"
+#include "stdint.h"
 // 初始化位图
-void bitmap_init(struct bitmap* btmp) {
+void bitmap_init(struct bitmap *btmp) {
   memset(btmp->bits, 0, btmp->btmp_bytes_len);
 }
 // 判断bit_idx位是否为1，如果为1，则返回true，否则返回false
-bool bitmap_scan_test(struct bitmap* btmp, uint32_t bit_idx) {
+bool bitmap_scan_test(struct bitmap *btmp, uint32_t bit_idx) {
   uint32_t byte_idx = bit_idx / 8;   //计算是第几个byte
   uint32_t bit_index = bit_idx % 8;  //计算是该byte的第几位
   return (btmp->bits[byte_idx]) & (BITMAP_MASK << bit_index);
 }
 
 /* 在位图中申请连续cnt个位,成功则返回其起始位下标，失败返回-1 */
-int bitmap_scan(struct bitmap* btmp, uint32_t cnt) {
+int bitmap_scan(struct bitmap *btmp, uint32_t cnt) {
   bool find = false;
   int start_index = -1;
   int now_index = 0;
@@ -64,4 +61,16 @@ int bitmap_scan(struct bitmap* btmp, uint32_t cnt) {
   }
   return start_index;
 }
-void bitmap_set(struct bitmap* btmp, uint32_t bit_idx, int8_t value);
+/* 将位图btmp的bit_idx位设置为value */
+void bitmap_set(struct bitmap *btmp, uint32_t bit_idx, int8_t value) {
+  ASSERT(value == 0 || value == 1);
+  uint32_t byte_index = bit_idx / 8;
+  uint32_t bit_index = bit_idx % 8;
+  if (value) {
+    //如果是1
+    btmp->bits[byte_index] |= BITMAP_MASK << bit_index;
+  } else {
+    //如果是0
+    btmp->bits[byte_index] &= ~(BITMAP_MASK << bit_index;)
+  }
+}
