@@ -52,7 +52,7 @@ uint32_t *pde_ptr(uint32_t vaddr) {
   return (uint32_t *)(0xfffff000 + PDE_IDX(vaddr) * 4);
 }
 
-//在m_pool指向的内存池中，分配1个page
+//在m_pool指向的物理内存池中，分配1个page
 static void *palloc(struct pool *m_pool) {
   int bit_index = bitmap_scan(&m_pool->pool_map, 1);
   if (bit_index == -1) {
@@ -62,6 +62,7 @@ static void *palloc(struct pool *m_pool) {
   uint32_t page_phyaddr = m_pool->phy_addr_start + bit_index * PG_SIZE;
   return (void *)page_phyaddr;
 }
+//向页表中添加一条记录，表示新增的物理页
 static void page_table_add(void *_vaddr, void *_page_phyaddr) {
   uint32_t vaddr = (uint32_t)_vaddr;
   uint32_t page_phyaddr = (uint32_t)_page_phyaddr;
@@ -104,14 +105,17 @@ void *malloc_page(enum pool_flags pf, uint32_t pg_cnt) {
     if (phyaddr == NULL) {  //如果物理页面分配失败
       return NULL;
     }
-    page_table_add((void*) vaddr, phyaddr);
+    page_table_add((void *)vaddr, phyaddr);
     vaddr += PG_SIZE;
   }
   return vaddr_start;
 }
+
+//获取内核分配后的页面起始位置
 void *get_kernel_pages(uint32_t pg_cnt) {
   void *vaddr = malloc_page(PF_KERNEL, pg_cnt);
   if (vaddr != NULL) {
+    //将新分配的内存初始化
     memset(vaddr, 0, pg_cnt * PG_SIZE);
   }
   return vaddr;
@@ -129,7 +133,7 @@ static void mem_pool_init(uint32_t all_mem) {
   uint32_t page_table_mem = 256 * PG_SIZE;
   //已使用的内存为页目录表+页目录项+低端1MB内存
   uint32_t used_mem = page_table_mem + 0x100000;
-  uint32_t free_mem = all_mem - free_mem;
+  uint32_t free_mem = all_mem - used_mem;
   //计算内存页数
   uint32_t all_free_pages = free_mem / PG_SIZE;
   kernel_free_pages = all_free_pages / 2;
@@ -155,14 +159,14 @@ static void mem_pool_init(uint32_t all_mem) {
   //初始化位图空间
   bitmap_init(&kernel_pool.pool_map);
   bitmap_init(&user_pool.pool_map);
-  printf("      kernel_pool_bitmap_start:");
+  printf("kernel_pool_bitmap_start:");
   printInt((long)kernel_pool.pool_map.bits);
-  printf(" kernel_pool_phy_addr_start:");
+  printf("kernel_pool_phy_addr_start:");
   printInt(kernel_pool.phy_addr_start);
   printf("\n");
-  printf("      user_pool_bitmap_start:");
+  printf("user_pool_bitmap_start:");
   printInt((long)user_pool.pool_map.bits);
-  printf(" user_pool_phy_addr_start:");
+  printf("user_pool_phy_addr_start:");
   printInt(user_pool.phy_addr_start);
   printf("\n");
   //设置虚拟内存空间
