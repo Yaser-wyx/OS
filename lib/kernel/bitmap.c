@@ -1,7 +1,7 @@
 #include "bitmap.h"
 #include "debug.h"
-#include "string.h"
 #include "stdint.h"
+#include "string.h"
 // 初始化位图
 void bitmap_init(struct bitmap *btmp) {
   memset(btmp->bits, 0, btmp->btmp_bytes_len);
@@ -24,13 +24,13 @@ int bitmap_scan(struct bitmap *btmp, uint32_t cnt) {
   while (!find && ((btmp->btmp_bytes_len) - now_index) * 8 >= cnt) {
     //如果没有找到，就一直找，直到剩余的位数不够要分配的空间
     //先查找byte
-    bool find_byte = false;
+    bool find_byte = byte_cnt > 0 ? false : true;
+
     while (!find_byte && (btmp->btmp_bytes_len - now_index) * 8 >= cnt) {
       while ((btmp->bits[now_index] | 0x00)) {
         //不断向后找，直到找到一块全空的
         now_index++;
       }
-      start_index = now_index;
       find_byte = true;  //假设找到了
       for (int i = now_index + 1; i < now_index + byte_cnt; i++) {
         if (btmp->bits[i] | 0x00) {
@@ -42,12 +42,15 @@ int bitmap_scan(struct bitmap *btmp, uint32_t cnt) {
         }
       }
     }
+    start_index = now_index;
     // byte寻找完成
     if (find_byte) {  //如果找到了足够的字节数
       //寻找bit
-      now_index += (byte_cnt - 1);
+      if (byte_cnt > 1) {
+        now_index += (byte_cnt - 1);
+      }
       find = true;
-      int base_index = now_index * 8;
+      int base_index = now_index;
       for (int i = 0; i < bit_cnt; i++) {
         if (bitmap_scan_test(btmp, base_index + i)) {
           //当前位不为空
@@ -71,6 +74,6 @@ void bitmap_set(struct bitmap *btmp, uint32_t bit_idx, int8_t value) {
     btmp->bits[byte_index] |= BITMAP_MASK << bit_index;
   } else {
     //如果是0
-    btmp->bits[byte_index] &= ~(BITMAP_MASK << bit_index;)
+    btmp->bits[byte_index] &= ~(BITMAP_MASK << bit_index);
   }
 }

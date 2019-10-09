@@ -22,7 +22,7 @@ uint32_t strlen(const char* src) {
  */
 int8_t strcmp(const char* _dist_, const char* _src_) {
   ASSERT(_dist_ != NULL && _src_ != NULL);
-  while (*_dist != 0 && *_dist_ == *_src_) {
+  while (*_dist_ != 0 && *_dist_ == *_src_) {
     _dist_++;
     _src_++;
   }
@@ -43,7 +43,7 @@ char* strrchr(const char* _src_, const char ch) {
   char* last_index_of_char = NULL;
   while (*_src_ != 0) {
     if (*_src_ == ch) {
-      last_index_of_char = src;
+      last_index_of_char = _src_;
     }
     _src_++;
   }
@@ -52,7 +52,10 @@ char* strrchr(const char* _src_, const char ch) {
 /* 将字符串src_拼接到dst_后,将回拼接的串地址 */
 char* strcat(char* _dist_, const char* _src_) {
   ASSERT(_dist_ != NULL && _src_ != NULL);
-  char* dist = _dist_ while (*dist != 0) { dist++; }
+  char* dist = _dist_;
+  while (*dist != 0) {
+    dist++;
+  }
   while (*_src_ != 0) {
     *dist++ = *_src_++;
   }
@@ -72,30 +75,30 @@ uint32_t strchrs(const char* str, uint8_t ch) {
 }
 
 //复制指定字符串到内存dist
-void memset(void *_dist_, uint32_t size, uint32_t value) {
+void memset(void* _dist_, uint32_t size, uint32_t value) {
   ASSERT(_dist_ != NULL);
-  uint8_t *dist = (uint8_t *)_dist_;
+  uint8_t* dist = (uint8_t*)_dist_;
   while (size--) {
     *dist = value;
     dist++;
   }
 }
 //将指定个数的字符串复制到指定位置
-void memcpy(void *_dist_, const void *_src_, uint32_t size) {
+void memcpy(void* _dist_, const void* _src_, uint32_t size) {
   ASSERT(_dist_ != NULL && _src_ != NULL);
 
-  uint8_t *dist = (uint8_t *)_dist_;
-  uint8_t *src = (uint8_t *)_src_;
+  uint8_t* dist = (uint8_t*)_dist_;
+  uint8_t* src = (uint8_t*)_src_;
   while (size--) {
     *dist++ = *src++;
   }
 }
 
 //比较目标地址与原始地址的内存是否一致,相同返回0，dist>src则返回1，否则返回-1
-int memcmp(const void *_dist_, const void *_src_, uint32_t size) {
+int memcmp(const void* _dist_, const void* _src_, uint32_t size) {
   ASSERT(_dist_ != NULL && _src_ != NULL);
-  uint8_t *dist = (uint8_t *)_dist_;
-  uint8_t *src = (uint8_t *)_src_;
+  uint8_t* dist = (uint8_t*)_dist_;
+  uint8_t* src = (uint8_t*)_src_;
   while (size--) {
     if (*dist != *src) {
       return *dist > *src ? 1 : -1;

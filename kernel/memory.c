@@ -14,6 +14,8 @@
 #define PDE_IDX(addr) ((addr & 0xffc00000) >> 22)
 #define PTE_IDX(addr) ((addr & 0x003ff000) >> 12)
 
+uint32_t kernel_free_pages;
+uint32_t user_free_pages;
 struct pool {
   struct bitmap pool_map;   //使用位图来管理物理内存
   uint32_t phy_addr_start;  //需要管理的物理内存起始地址
@@ -24,26 +26,95 @@ struct pool {
 struct pool kernel_pool, user_pool;
 struct virtual_addr kernel_vaddr;  //用来给内核分配虚拟地址(用于虚拟内存分配)
 
+//分配虚拟内存空间
 static void *vaddr_get(enum pool_flags pf, uint32_t pg_cnt) {
-  int vaddr_start = 0, bit_idx_start = -1;
-  uint32_t cnt = 0;
-  if (pf == PF_KERNEL) {
-    bit_idx_start = bitmap_scan(kernel_vaddr.vaddr_bitmap, pg_cnt);
-    if (bit_idx_start == -1) {
+  int vaddr_start = 0, bit_index_start = -1;
+  if (pf == PF_KERNEL) {  //如果是为内核分配虚拟空间
+    bit_index_start = bitmap_scan(&kernel_vaddr.vaddr_bitmap, pg_cnt);
+    if (bit_index_start == -1) {
       return NULL;
     }
+    uint32_t cnt = 0;
     while (cnt < pg_cnt) {
-      bitmap_set(&kernel_vaddr.vaddr_bitmap, bit_idx_start + cnt, 1);
+      bitmap_set(&kernel_vaddr.vaddr_bitmap, bit_index_start + cnt, 1);
+      //将指定位置的位图填充，表示该区域的内存已经使用了
       cnt++;
     }
-    vaddr_start = kernel_vaddr.vaddr_start + bit_idx_start * PG_SIZE;
-  } else {
+    vaddr_start = kernel_vaddr.vaddr_start + bit_index_start * PG_SIZE;
   }
   return (void *)vaddr_start;
 }
 uint32_t *pte_ptr(uint32_t vaddr) {
-  uint32_t *pte = (uint32_t *)(0xffc00000 + ((vaddr & 0xffc00000) >> 10) +
-                               PTE_IDX(vaddr) * 4);
+  return (uint32_t *)(0xffc00000 + ((vaddr & 0xffc00000) >> 10) +
+                      PTE_IDX(vaddr) * 4);
+}
+uint32_t *pde_ptr(uint32_t vaddr) {
+  return (uint32_t *)(0xfffff000 + PDE_IDX(vaddr) * 4);
+}
+
+//在m_pool指向的内存池中，分配1个page
+static void *palloc(struct pool *m_pool) {
+  int bit_index = bitmap_scan(&m_pool->pool_map, 1);
+  if (bit_index == -1) {
+    return NULL;
+  }
+  bitmap_set(&m_pool->pool_map, bit_index, 1);
+  uint32_t page_phyaddr = m_pool->phy_addr_start + bit_index * PG_SIZE;
+  return (void *)page_phyaddr;
+}
+static void page_table_add(void *_vaddr, void *_page_phyaddr) {
+  uint32_t vaddr = (uint32_t)_vaddr;
+  uint32_t page_phyaddr = (uint32_t)_page_phyaddr;
+  uint32_t *pde = pde_ptr(vaddr);
+  uint32_t *pte = pte_ptr(vaddr);
+  ASSERT(!(*pte) & 0x1);
+  if (!(*pde & 0x1)) {
+    //如果pde不存在，就从内核空间中分配一页框
+    uint32_t pde_phyaddr = (uint32_t)palloc(&kernel_pool);
+    //将新分配的页框地址写入pde表中
+    *pde = (pde_phyaddr | PG_US_U | PG_RW_W | PG_P_1);
+    memset((void *)((int)pte & 0xfffff000), 0, PG_SIZE);  //将新的物理页清空为0
+  }
+  *pte = (page_phyaddr | PG_US_U | PG_RW_W | PG_P_1);
+}
+//分配pg_cnt页空间，成功则返回起始虚拟地址，否则返回null
+void *malloc_page(enum pool_flags pf, uint32_t pg_cnt) {
+  //先判断剩余的页面数否够pg_cnt
+  ASSERT(pg_cnt > 0);
+  struct pool *mem_pool;
+  if (pf == PF_KERNEL) {
+    mem_pool = &kernel_pool;
+    ASSERT(pg_cnt < kernel_free_pages);
+    kernel_free_pages -= pg_cnt;
+  } else {
+    mem_pool = &user_pool;
+    ASSERT(pg_cnt < user_free_pages);
+    user_free_pages -= pg_cnt;
+  }
+  //页面数充足
+  //获取虚拟地址
+  void *vaddr_start = vaddr_get(pf, pg_cnt);
+  if (vaddr_start == NULL) {
+    return NULL;
+  }
+  uint32_t vaddr = (uint32_t)vaddr_start, cnt = pg_cnt;
+  while (cnt--) {
+    //分配一个物理页面
+    void *phyaddr = palloc(mem_pool);
+    if (phyaddr == NULL) {  //如果物理页面分配失败
+      return NULL;
+    }
+    page_table_add((void*) vaddr, phyaddr);
+    vaddr += PG_SIZE;
+  }
+  return vaddr_start;
+}
+void *get_kernel_pages(uint32_t pg_cnt) {
+  void *vaddr = malloc_page(PF_KERNEL, pg_cnt);
+  if (vaddr != NULL) {
+    memset(vaddr, 0, pg_cnt * PG_SIZE);
+  }
+  return vaddr;
 }
 static void mem_pool_init(uint32_t all_mem) {
   printf("mem_pool_init start\n");
@@ -61,8 +132,8 @@ static void mem_pool_init(uint32_t all_mem) {
   uint32_t free_mem = all_mem - free_mem;
   //计算内存页数
   uint32_t all_free_pages = free_mem / PG_SIZE;
-  uint32_t kernel_free_pages = all_free_pages / 2;
-  uint32_t user_free_pages = all_free_pages - kernel_free_pages;
+  kernel_free_pages = all_free_pages / 2;
+  user_free_pages = all_free_pages - kernel_free_pages;
   //计算位图空间大小，即位图的字节数
   //位图中一位表示1页，一字节表示8页
   uint32_t kernel_bitmap_length = kernel_free_pages / 8;
