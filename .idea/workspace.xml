@@ -13,48 +13,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf4f81d3-3bd0-466d-b19c-1691aefaf500" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/list.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/thread.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/kernel/list.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/kernel/thread.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/device/timer.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/kernel/interrupt.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/kernel/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/OS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OS.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/thread_list.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/thread_list.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boot/boot.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/boot/boot.asm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boot/loader.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/boot/loader.asm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/kernel.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/kernel.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/device/timer.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/device/timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/timer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/boot.inc" beforeDir="false" afterPath="$PROJECT_DIR$/src/boot/include/boot.inc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/debug.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/debug.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/debug.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/debug.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/global.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/global.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/init.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/init.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/init.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/interrupt.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/interrupt.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/interrupt.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/kernel.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/kernel.asm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/main.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/memory.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/memory.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel/memory.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/memory.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/bitmap.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/bitmap.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/bitmap.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/bitmap.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/io.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/io.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/print.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/print.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/print.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/print.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/stdint.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/stdint.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/string.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/string.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tool.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/list.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/list.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/interrupt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/interrupt.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -90,7 +54,8 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/lib" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -142,8 +107,16 @@
       <option name="presentableId" value="Default" />
       <updated>1570604619845</updated>
       <workItem from="1570604622189" duration="65000" />
-      <workItem from="1570786652324" duration="11207000" />
+      <workItem from="1570786652324" duration="16886000" />
     </task>
+    <task id="LOCAL-00001" summary="调整了代码目录结构">
+      <created>1570800489534</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1570800489534</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -161,5 +134,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="调整了代码目录结构" />
+    <option name="LAST_COMMIT_MESSAGE" value="调整了代码目录结构" />
   </component>
 </project>
