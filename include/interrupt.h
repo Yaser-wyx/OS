@@ -1,11 +1,13 @@
 #ifndef __KERNEL_INTERRUPT_H
 #define __KERNEL_INTERRUPT_H
+
 #include "stdint.h"
+
 void idt_init(void);
+
 typedef void *interrupt_handler; //中断处理函数指针
 //定义两种中断状态：开启，关闭
-enum intr_status
-{
+enum intr_status {
     INTR_OFF,
     INTR_ON
 };

@@ -27,7 +27,6 @@ section .text
 
         push %1                 ;将中断向量压栈
         call [idt_table + %1*4] ;调用指定的中断处理函数
-        add esp,4               ;清除参数
         ;恢复上下文
         jmp intr_exit
 section .data
@@ -35,6 +34,7 @@ section .data
 %endmacro
 section .text
     intr_exit:
+        add esp,4               ;跳过中断号
         popad
         pop ds
         pop fs

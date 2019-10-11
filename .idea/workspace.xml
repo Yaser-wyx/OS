@@ -1,16 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
-    <generated />
+    <generated>
+      <config projectName="OS" targetName="ALL_LIB" />
+      <config projectName="OS" targetName="KERNEL" />
+    </generated>
   </component>
-  <component name="CMakeSettings">
+  <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf4f81d3-3bd0-466d-b19c-1691aefaf500" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/kernel/memory.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/memory.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/list.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/thread.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/list.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/thread.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/device/timer.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/kernel/interrupt.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/kernel/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/OS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OS.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boot/boot.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/boot/boot.asm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boot/loader.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/boot/loader.asm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/kernel.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/kernel.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/device/timer.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/device/timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/timer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/boot.inc" beforeDir="false" afterPath="$PROJECT_DIR$/src/boot/include/boot.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/debug.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/debug.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/debug.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/debug.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/global.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/global.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/init.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/init.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/interrupt.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/interrupt.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/interrupt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/kernel.asm" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/kernel.asm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/main.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/memory.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/memory.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/memory.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/memory.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/bitmap.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/bitmap.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/bitmap.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/bitmap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/io.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/io.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/print.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/print.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/print.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/print.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/stdint.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/stdint.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/string.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/string.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tool.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,16 +65,43 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CMakeLists.txt" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="OCResolveContextSettings">
+    <option name="configuration" value="0-ALL_LIB" />
+  </component>
   <component name="ProjectId" id="1RxN7SpAGjoHFBVKS3n6NgziVjq" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="F:/mooc_os_lab" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="settings.github" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\share\OS\lib" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\share\OS\include" />
+      <recent name="D:\share\OS\src" />
+      <recent name="D:\share\OS\boot" />
+      <recent name="D:\share\OS\lib\kernel" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -44,6 +115,22 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="CMake Application.KERNEL">
+    <configuration name="ALL_LIB" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="OS" TARGET_NAME="ALL_LIB" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="KERNEL" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="OS" TARGET_NAME="KERNEL" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="OS" RUN_TARGET_NAME="KERNEL">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.KERNEL" />
+      <item itemvalue="CMake Application.ALL_LIB" />
+    </list>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -55,6 +142,7 @@
       <option name="presentableId" value="Default" />
       <updated>1570604619845</updated>
       <workItem from="1570604622189" duration="65000" />
+      <workItem from="1570786652324" duration="11207000" />
     </task>
     <servers />
   </component>
@@ -66,7 +154,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

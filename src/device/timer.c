@@ -30,23 +30,22 @@ const uint32_t IRQ0_FREQUENCY = 100;
 #define TIMER_1 0x41
 #define TIMER_2 0x42
 
-static void setup_timer(uint8_t timer_no, uint8_t rw, uint8_t mode, uint8_t num_sys, uint16_t timer_value, uint8_t timer_port)
-{
+static void
+setup_timer(uint8_t timer_no, uint8_t rw, uint8_t mode, uint8_t num_sys, uint16_t timer_value, uint8_t timer_port) {
     printf("timer value:");
     printInt(timer_value);
     printf("\n");
-    uint8_t ctrl_8253 = (uint8_t)(timer_no << 6 | rw << 4 | mode << 1 | num_sys);
+    uint8_t ctrl_8253 = (uint8_t) (timer_no << 6 | rw << 4 | mode << 1 | num_sys);
     printInt(ctrl_8253);
     printf("\n");
     outb(CTRL_PORT, ctrl_8253);
     //设置低地址
-    outb(timer_port, (uint8_t)timer_value);
+    outb(timer_port, (uint8_t) timer_value);
     //设置高地址
-    outb(timer_port, (uint8_t)(timer_value >> 8));
+    outb(timer_port, (uint8_t) (timer_value >> 8));
 }
 
-void timer_init()
-{
+void timer_init() {
     printf("timer start to init!\n");
     uint16_t timer_value = FREQUENCY / IRQ0_FREQUENCY;
     setup_timer(TIMER_0, RW_MODE_LOW_HIGHT, WORK_MODE_2, NUM_SYS_BIN, timer_value, TIMER_0);

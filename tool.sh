@@ -1,7 +1,7 @@
 # 写入引导程序
-nasm -I include/ -o ./build/boot.bin ./boot/boot.asm && 
+nasm -I src/boot/include/ -o ./build/boot.bin src/boot/boot.asm &&
 dd if=./build/boot.bin of=/home/yaser/workspace/yaser.img bs=512 count=1  conv=notrunc&&
-nasm -I include/ -o ./build/loader.bin ./boot/loader.asm && 
+nasm -I src/boot/include/ -o ./build/loader.bin src/boot/loader.asm &&
 dd if=./build/loader.bin  of=/home/yaser/workspace/yaser.img bs=512 count=3 seek=2 conv=notrunc&&
 
 # # 编译文件

@@ -1,6 +1,4 @@
-build/
-build/print.o
-build/init.o
-build/interrupt.o
-build/kernel.bin
 ./.idea
+/.vscode/
+/build/
+/cmake-build-debug/
