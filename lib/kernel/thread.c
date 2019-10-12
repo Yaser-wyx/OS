@@ -1,48 +1,105 @@
 #include "thread.h"
+#include "debug.h"
 #include "global.h"
+#include "interrupt.h"
 #include "memory.h"
 #include "string.h"
 
 #define PAGE_SIZE 4096
 
+struct task_struct *main_thread;      //主线程pcb
+struct list thread_ready_list;        //就绪队列
+struct list thread_all_list;          //所有任务队列
+static struct list_elem *thread_tag;  //队列线程节点
+
+//线程切换
+extern void switch_to(struct task_struct *currect, struct task_struct *next);
+
 static void kernel_thread(thread_func *function, void *func_arg) {
-    function(func_arg);
+  intr_enable();  //开启中断
+  function(func_arg);
+}
+//获取当前线程pcb指针
+struct task_struct *get_running_thread() {
+  uint32_t esp;
+  __asm__ volatile("mov %%esp,%0" : = "g"(esp));
+  return (struct task_struct *)(esp & 0xfffff000);
 }
 
-//创建线程
-void create_thread(struct task_struct *thread_pcb, thread_func func, void *func_arg) {
-    //预留中断栈以及线程栈的使用空间
-    thread_pcb->self_kstack -= (sizeof(struct intr_stack) + sizeof(struct thread_stack));
-    struct thread_stack *kthread_stack = (struct thread_stack *) thread_pcb->self_kstack;
-
-    kthread_stack->eip = kernel_thread;
-    kthread_stack->function = func;
-    kthread_stack->func_arg = func_arg;
-    kthread_stack->esi = kthread_stack->edi = kthread_stack->ebx = kthread_stack->ebp = 0;
+//为main_thread创建pcb
+static void make_main_thread(void) {
+  main_thread =
+      get_running_thread();  //获取main_thread，当前运行的线程就是main_thread
+  init_thread_pcb(main_thread, "main", 31);  //初始化主线程的pcb
+  ASSERT(!elem_find(&thread_all_list, &main_thread->all_list_tag));
+  //将主线程pcb中的tag加入到所有线程队列中
+  list_append(&thread_all_list, &main_thread->all_list_tag);
 }
 
-//初始化线程pcb
-void init_thread_pcb(struct task_struct *thread_pcb, char *name, int priority) {
-
-    strcpy(thread_pcb->name, name);
-    thread_pcb->priority = priority;
-    thread_pcb->status = TASK_RUNNING;
-    thread_pcb->statck_magic = 0x52013140;
-    //将内核栈指针指向栈顶
-    thread_pcb->self_kstack = (uint32_t *) ((uint32_t) thread_pcb + PAGE_SIZE);
+//线程初始化
+void thread_init(void) {
+  //步骤：
+  // 1.初始化两个线程队列：就绪队列以及所有线程队列
+  // 2.生成主线程的pcb，并将其放入所有线程队列中
+  printf("thread init start!\n");
+  thread_list_init(&thread_all_list);
+  thread_list_init(&thread_ready_list);
+  make_main_thread();  //创建主线程pcb
+  printf("thread init done!\n");
 }
 
 //创建一个名为name的线程，运行func(func_arg),并将其启动
-struct task_struct *thread_start(char *name, int priority, thread_func func, void *func_arg) {
-    //为当前线程分配一页内存，用于创建pcb
-    struct task_struct *thread_pcb = get_kernel_pages(1);
-    init_thread_pcb(thread_pcb, name, priority); //初始化pcb块
-    create_thread(thread_pcb, func, func_arg);   //创建线程
-    //通过ret来调用kernel_thread函数
-    __asm__ volatile(
-    "movl %0, %%esp; pop %%ebp; pop %%ebx; pop %%edi; pop %%esi; ret"
-    :
-    : "g"(thread_pcb->self_kstack)
-    : "memory");
-    return thread_pcb;
+struct task_struct *thread_start(char *name, int priority, thread_func func,
+                                 void *func_arg) {
+  //为当前线程分配一页内存，用于创建pcb
+  struct task_struct *thread_pcb = get_kernel_pages(1);
+  init_thread_pcb(thread_pcb, name, priority);  //初始化pcb块
+  create_thread(thread_pcb, func, func_arg);    //创建线程
+
+  //保证要运行的线程还没有放到ready队列中
+  ASSERT(!elem_find(&thread_ready_list, &thread_pcb->general_tag));
+  list_append(&thread_ready_list, &thread_pcb->general_tag);
+  
+  ASSERT(!elem_find(&thread_all_list, &thread_pcb->all_list_tag));
+  list_append(&thread_all_list, &thread_pcb->all_list_tag);
+
+  return thread_pcb;
+}
+
+//初始化线程的pcb
+void init_thread_pcb(struct task_struct *thread_pcb, char *name, int priority) {
+  strcpy(thread_pcb->name, name);
+  if (thread_pcb == main_thread) {
+    //如果是主线程
+    thread_pcb->status = TASK_RUNNING;
+  } else {
+    thread_pcb->status = TASK_READY;
+  }
+  thread_pcb->ticks = priority;
+  thread_pcb->elapsed_ticks = 0;
+  thread_pcb->pgdir = NULL;
+  thread_pcb->priority = priority;
+  thread_pcb->stack_magic = 0x52013140;
+  //将内核栈指针指向栈顶
+  thread_pcb->self_kstack = (uint32_t *)((uint32_t)thread_pcb + PAGE_SIZE);
+}
+
+//创建线程
+void create_thread(struct task_struct *thread_pcb, thread_func func,
+                   void *func_arg) {
+  //预留中断栈以及线程栈的使用空间
+  thread_pcb->self_kstack -=
+      (sizeof(struct intr_stack) + sizeof(struct thread_stack));
+  struct thread_stack *kthread_stack =
+      (struct thread_stack *)thread_pcb->self_kstack;
+
+  kthread_stack->eip = kernel_thread;
+  kthread_stack->function = func;
+  kthread_stack->func_arg = func_arg;
+  kthread_stack->esi = kthread_stack->edi = kthread_stack->ebx =
+      kthread_stack->ebp = 0;
+}
+
+void schedule(){
+  
 }

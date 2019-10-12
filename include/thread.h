@@ -1,6 +1,7 @@
 #ifndef __THREAD_THREAD_H
 #define __THREAD_THREAD_H
 #include "stdint.h"
+#include "thread_list.h"
 //定义自定义函数类型
 typedef void thread_func(void *);
 
@@ -15,7 +16,7 @@ enum task_status {
 };
 //中段栈
 struct intr_stack {
-  uint32_t vec_no; //中断号
+  uint32_t vec_no;  //中断号
   uint32_t edi;
   uint32_t esi;
   uint32_t ebp;
@@ -45,22 +46,33 @@ struct thread_stack {
 
   void (*eip)(thread_func *func, void *func_arg);
 
-  void *unused_retaddr;  //站位地址，作为被调用函数的栈顶
-  thread_func *function; //线程调用的函数
-  void *func_arg;        //线程调用函数的参数
+  void *unused_retaddr;   //站位地址，作为被调用函数的栈顶
+  thread_func *function;  //线程调用的函数
+  void *func_arg;         //线程调用函数的参数
 };
 
 //线程或进程的PCB
 struct task_struct {
-  enum task_status status; //当前线程或进程状态
-  uint8_t priority;        //优先级
+  enum task_status status;  //当前线程或进程状态
+  uint8_t priority;         //优先级
   char name[16];
-  uint32_t statck_magic; //检测栈溢出
-  uint32_t *self_kstack; //内核栈顶指针
+  uint8_t ticks;           //每次上cpu执行的时间
+  uint32_t elapsed_ticks;  //此任务已经占用了多少cpu时间
+
+  struct list_elem general_tag;
+  struct list_elem all_list_tag;
+  uint32_t *pgdir;  //页表地址
+
+  uint32_t stack_magic;   //检测栈溢出
+  uint32_t *self_kstack;  //内核栈顶指针
 };
 struct task_struct *thread_start(char *name, int priority, thread_func func,
                                  void *func_arg);
 void init_thread_pcb(struct task_struct *thread_pcb, char *name, int priority);
 void create_thread(struct task_struct *thread_pcb, thread_func func,
                    void *func_arg);
+void thread_init(void);
+struct task_struct *get_running_thread(void);
+void schedule(void);
+
 #endif
