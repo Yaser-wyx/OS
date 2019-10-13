@@ -14,3 +14,8 @@ ADD_SUBDIRECTORY(LIB)
 ADD_EXECUTABLE(KERNEL ${KERNEL_SRC} ${DEVICE_SRC} ${BOOT_SRC})
 #添加所有的链接库
 TARGET_LINK_LIBRARIES(KERNEL ALL_LIB)
+
+
+#project(test)
+#
+#add_executable(test src/test.cpp)

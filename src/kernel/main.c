@@ -1,6 +1,7 @@
 #include "print.h"
 #include "init.h"
 #include "thread.h"
+#include "interrupt.h"
 
 void test_run_thread(void *arg) {
     char *para = arg;
@@ -8,19 +9,21 @@ void test_run_thread(void *arg) {
         printf(para);
     }
 }
-
+void test_run_thread_b(void *arg) {
+    char *para = arg;
+    for (;;) {
+        printf(para);
+    }
+}
 int main(void) {
     printf("\nkernel start done!\n");
     init_all();
-    // __asm__ volatile("sti"); //打开所有中断，将IF位置1
-    // void* addr = get_kernel_pages(3);
-    // printf("kernel pages addr:");
-    // printInt((unsigned long)addr);
-    // printf("\n");
-    // int len = sizeof(long);
-    // printf("the length of long:");
-    // printInt(len);
-    thread_start("test thread", 33, test_run_thread, "test_thread\n");
+
+    thread_start("test thread a", 32, test_run_thread, "aaaaaaa    ");
+    thread_start("test thread b", 3, test_run_thread_b, "bbbbbbb    ");
+
+    intr_enable();
     while (1) {
+        printf("Main    ");
     }
 }

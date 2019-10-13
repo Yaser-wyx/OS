@@ -56,7 +56,7 @@ static void general_intr_handler(uint8_t vector_num) {
   set_cursor(0);  //设置光标位置为起始
   int cursor_pos = 0;
   while (cursor_pos < 320) {
-    put_char(" ");  //清除出一片空白区域
+    put_char(' ');  //清除出一片空白区域
     cursor_pos++;
   }
   set_cursor(0);
@@ -70,7 +70,7 @@ static void general_intr_handler(uint8_t vector_num) {
     printf("\npage fault vaddr:");
     printInt(page_fault_vaddr);
   }
-  printf("!!!!!    interrupt occur message end     !!!!!");
+  printf("\n!!!!!    interrupt occur message end     !!!!!");
   while (1) {
     //设置死循环
   }
