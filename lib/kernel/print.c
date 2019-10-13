@@ -1,4 +1,5 @@
 #include "print.h"
+#include "interrupt.h"
 
 void printf(uint8_t *str) {
     //先实现打印字符串的版本

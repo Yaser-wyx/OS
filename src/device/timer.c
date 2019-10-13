@@ -33,9 +33,8 @@ static uint32_t ticks;  //自内核开启中断以来总共的滴答数
 #define TIMER_1 0x41
 #define TIMER_2 0x42
 
-static void setup_timer(uint8_t timer_no, uint8_t rw, uint8_t mode,
-                        uint8_t num_sys, uint16_t timer_value,
-                        uint8_t timer_port) {
+static void
+setup_timer(uint8_t timer_no, uint8_t rw, uint8_t mode, uint8_t num_sys, uint16_t timer_value, uint8_t timer_port) {
     printf("timer value:");
     printInt(timer_value);
     printf("\n");
@@ -70,8 +69,7 @@ static void intr_timer_handler(void) {
 void timer_init() {
     printf("timer start to init!\n");
     uint16_t timer_value = FREQUENCY / IRQ0_FREQUENCY;
-    setup_timer(TIMER_0, RW_MODE_LOW_HIGHT, WORK_MODE_2, NUM_SYS_BIN, timer_value,
-                TIMER_0);
+    setup_timer(TIMER_0, RW_MODE_LOW_HIGHT, WORK_MODE_2, NUM_SYS_BIN, timer_value, TIMER_0);
     register_handler(0x20, intr_timer_handler);
     printf("timer init done!\n");
 }

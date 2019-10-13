@@ -28,4 +28,7 @@
 #define bool int
 #define true 1
 #define false 0
+
+#define saveInterAndDisable     enum intr_status old_status = intr_disable()
+#define reloadInter         set_intr_status(old_status)
 #endif

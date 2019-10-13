@@ -1,8 +1,7 @@
 #include "thread_list.h"
 #include "interrupt.h"
+#include "global.h"
 
-#define saveInterAndDisable     enum intr_status old_status = intr_disable()
-#define reloadInter         set_intr_status(old_status)
 
 
 //线程链表初始化

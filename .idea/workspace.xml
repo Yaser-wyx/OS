@@ -12,22 +12,20 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cf4f81d3-3bd0-466d-b19c-1691aefaf500" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/kernel/switch.asm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test.cpp" afterDir="false" />
+    <list default="true" id="cf4f81d3-3bd0-466d-b19c-1691aefaf500" name="Default Changelist" comment="finished c9">
+      <change afterPath="$PROJECT_DIR$/include/sync.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/sync.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/init.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/init.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/interrupt.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/interrupt.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/kernel.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/print.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/print.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/global.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/global.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/thread.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/thread.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/print.asm" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/print.asm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/print.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/print.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/kernel/thread.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/thread.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/thread_list.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/thread_list.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/device/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/timer.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kernel/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/init.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/kernel/interrupt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/interrupt.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/kernel/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/kernel/memory.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/memory.c" afterDir="false" />
@@ -42,6 +40,9 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FavoritesManager">
+    <favorites_list name="OS" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -64,17 +65,17 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\share\OS\lib" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\share\OS\include" />
       <recent name="D:\share\OS\src" />
       <recent name="D:\share\OS\boot" />
       <recent name="D:\share\OS\lib\kernel" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\share\OS\lib" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -116,7 +117,8 @@
       <option name="presentableId" value="Default" />
       <updated>1570604619845</updated>
       <workItem from="1570604622189" duration="65000" />
-      <workItem from="1570786652324" duration="35694000" />
+      <workItem from="1570786652324" duration="43763000" />
+      <workItem from="1570974113567" duration="4400000" />
     </task>
     <task id="LOCAL-00001" summary="调整了代码目录结构">
       <created>1570800489534</created>
@@ -132,7 +134,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570806010677</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="finished c9">
+      <created>1570961895170</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1570961895170</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -156,6 +165,7 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="调整了代码目录结构" />
     <MESSAGE value="add data of list." />
-    <option name="LAST_COMMIT_MESSAGE" value="add data of list." />
+    <MESSAGE value="finished c9" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished c9" />
   </component>
 </project>

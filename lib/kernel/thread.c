@@ -98,7 +98,7 @@ void create_thread(struct task_struct *thread_pcb, thread_func func,
 }
 
 void schedule() {
-    ASSERT(intr_enable() == INTR_OFF);
+    ASSERT(get_intr_status() == INTR_OFF);
     //获取当前运行中的线程
     struct task_struct *current_task = get_running_thread();
     if (current_task->status == TASK_RUNNING && current_task->ticks == 0) {//当前线程处于运行状态，同时时间片已经用完了
@@ -106,6 +106,8 @@ void schedule() {
         current_task->status = TASK_READY;
         current_task->ticks = current_task->priority;
         list_append(&thread_ready_list, &current_task->general_tag);//将其加入到就绪队列里面
+    } else {
+        //处理阻塞或等待状态的线程
     }
 
     ASSERT(!list_empty(&thread_ready_list));//确保就绪队列不为空
@@ -113,5 +115,25 @@ void schedule() {
     struct list_elem *thread_tag = list_pop(&thread_ready_list);
     struct task_struct *new_task = elem2entry(struct task_struct, general_tag, thread_tag);
     new_task->status = TASK_RUNNING;
-    switch_to(current_task,new_task);
+    switch_to(current_task, new_task);
+}
+
+//将当前线程阻塞
+void thread_block(enum task_status state) {
+    saveInterAndDisable;
+    ASSERT(state != TASK_RUNNING || state != TASK_READY);
+    struct task_struct *current = get_running_thread();//获取当前线程
+    current->status = state;
+    schedule();
+    reloadInter;
+}
+
+//释放指定的线程
+void thread_unblock(struct task_struct *blocked_thread) {
+    saveInterAndDisable;
+    ASSERT(blocked_thread->status != TASK_READY || blocked_thread->status != TASK_RUNNING);
+    ASSERT(elem_find(&thread_ready_list, &blocked_thread->general_tag));
+    blocked_thread->status = TASK_READY;
+    list_push(&thread_ready_list, &blocked_thread->general_tag);
+    reloadInter;
 }

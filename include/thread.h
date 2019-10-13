@@ -73,18 +73,20 @@ struct task_struct {
     uint32_t stack_magic;   //检测栈溢出
 };
 
-struct task_struct *thread_start(char *name, int priority, thread_func func,
-                                 void *func_arg);
+struct task_struct *thread_start(char *name, int priority, thread_func func, void *func_arg);
 
 void init_thread_pcb(struct task_struct *thread_pcb, char *name, int priority);
 
-void create_thread(struct task_struct *thread_pcb, thread_func func,
-                   void *func_arg);
+void create_thread(struct task_struct *thread_pcb, thread_func func, void *func_arg);
 
 void thread_init(void);
 
 struct task_struct *get_running_thread(void);
 
 void schedule(void);
+
+void thread_block(enum task_status state);
+
+void thread_unblock(struct task_struct *blocked_thread);
 
 #endif
