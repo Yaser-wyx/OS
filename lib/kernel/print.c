@@ -10,7 +10,7 @@ void printf(uint8_t *str) {
 }
 
 void printInt(unsigned long number) {
-    uint8_t *str;
+    uint8_t *str = " ";
     int len = 0;
     while (number > 0) {
         *(str + len) = (number % 10) + 48;

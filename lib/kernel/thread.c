@@ -31,7 +31,7 @@ struct task_struct *get_running_thread() {
 //为main_thread创建pcb
 static void make_main_thread(void) {
     main_thread = get_running_thread();  //获取main_thread，当前运行的线程就是main_thread
-    init_thread_pcb(main_thread, "main", 32);  //初始化主线程的pcb
+    init_thread_pcb(main_thread, "main", 10);  //初始化主线程的pcb
     ASSERT(!elem_find(&thread_all_list, &main_thread->all_list_tag));
     //将主线程pcb中的tag加入到所有线程队列中
     list_append(&thread_all_list, &main_thread->all_list_tag);
@@ -101,7 +101,7 @@ void schedule() {
     ASSERT(get_intr_status() == INTR_OFF);
     //获取当前运行中的线程
     struct task_struct *current_task = get_running_thread();
-    if (current_task->status == TASK_RUNNING && current_task->ticks == 0) {//当前线程处于运行状态，同时时间片已经用完了
+    if (current_task->status == TASK_RUNNING ) {//当前线程处于运行状态，同时时间片已经用完了
         ASSERT(!elem_find(&thread_ready_list, &current_task->general_tag));//确保其不在ready队列中
         current_task->status = TASK_READY;
         current_task->ticks = current_task->priority;
@@ -132,9 +132,11 @@ void thread_block(enum task_status state) {
 void thread_unblock(struct task_struct *blocked_thread) {
     saveInterAndDisable;
     ASSERT(blocked_thread->status != TASK_READY || blocked_thread != TASK_RUNNING);
-    blocked_thread->status = TASK_READY;//将阻塞线程重新切换至就绪状态
-    ASSERT(!elem_find(&thread_ready_list, &blocked_thread->general_tag));
-    list_push(&thread_ready_list, &blocked_thread->general_tag);
+    if (blocked_thread->status != TASK_READY) {
+        blocked_thread->status = TASK_READY;//将阻塞线程重新切换至就绪状态
+        ASSERT(!elem_find(&thread_ready_list, &blocked_thread->general_tag));
+        list_push(&thread_ready_list, &blocked_thread->general_tag);
+    }
     reloadInter;
     /*saveInterAndDisable;
     ASSERT(blocked_thread->status != TASK_READY || blocked_thread->status != TASK_RUNNING);

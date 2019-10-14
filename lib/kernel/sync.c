@@ -1,143 +1,79 @@
-//
-// Created by wanyu on 2019/10/13.
-//
 #include "sync.h"
+#include "thread_list.h"
 #include "global.h"
 #include "debug.h"
 #include "interrupt.h"
 
-
-//信号量初始化
-void semaphore_init(struct semaphore *semaphore, uint8_t value) {
-    semaphore->value = value;
-    thread_list_init(&semaphore->waits);
+/* 初始化信号量 */
+void sema_init(struct semaphore *psema, uint8_t value) {
+    psema->value = value;       // 为信号量赋初值
+    thread_list_init(&psema->waiters); //初始化信号量的等待队列
 }
 
-//锁初始化
-void lock_init(struct lock *pLock) {
-    pLock->holder = NULL;
-    pLock->holder_rep = 0;
-    semaphore_init(&pLock->semaphore, 1);
+/* 初始化锁plock */
+void lock_init(struct lock *plock, uint32_t value) {
+    plock->holder = NULL;
+    plock->holder_repeat_nr = 0;
+    sema_init(&plock->semaphore, value);  // 信号量初值为1
 }
 
-//信号量P操作
-void semaphore_down(struct semaphore *semaphore) {
-    saveInterAndDisable;
-
-    while (semaphore->value == 0) {
-        //如果一直获取不到信号量，则当前线程持续阻塞，同时将自己放入到该信号量的等待队列中
-        list_append(&semaphore->waits, &get_running_thread()->general_tag);
-        thread_block(TASK_BLOCKED);
+/* 信号量down操作 */
+void sema_down(struct semaphore *psema) {
+/* 关中断来保证原子操作 */
+    enum intr_status old_status = intr_disable();
+    while (psema->value == 0) {    // 若value为0,表示已经被别人持有
+        ASSERT(!elem_find(&psema->waiters, &get_running_thread()->general_tag));
+        /* 当前线程不应该已在信号量的waiters队列中 */
+        if (elem_find(&psema->waiters, &get_running_thread()->general_tag)) {
+            PANIC("sema_down: thread blocked has been in waiters_list\n");
+        }
+/* 若信号量的值等于0,则当前线程把自己加入该锁的等待队列,然后阻塞自己 */
+        list_append(&psema->waiters, &get_running_thread()->general_tag);
+        thread_block(TASK_BLOCKED);    // 阻塞线程,直到被唤醒
     }
-    ASSERT(semaphore->value == 1);
-    semaphore->value--;//获得信号量
-    reloadInter;
+/* 若value为1或被唤醒后,会执行下面的代码,也就是获得了锁。*/
+    psema->value--;
+/* 恢复之前的中断状态 */
+    set_intr_status(old_status);
 }
 
-//信号量V操作
-void semaphore_up(struct semaphore *semaphore) {
-    saveInterAndDisable;
-    if (!list_empty(&semaphore->waits)) {
-        struct task_struct *blocked_thread = elem2entry(struct task_struct, general_tag, list_pop(&semaphore->waits));
-        thread_unblock(blocked_thread);//将阻塞的线程从阻塞状态恢复
+/* 信号量的up操作 */
+void sema_up(struct semaphore *psema) {
+/* 关中断,保证原子操作 */
+    enum intr_status old_status = intr_disable();
+    if (!list_empty(&psema->waiters)) {
+        struct task_struct *thread_blocked = elem2entry(struct task_struct, general_tag, list_pop(&psema->waiters));
+        thread_unblock(thread_blocked);
     }
-    semaphore->value++;
-    reloadInter;
+    psema->value++;
+/* 恢复之前的中断状态 */
+    set_intr_status(old_status);
 }
 
-//请求锁
-void lock_require(struct lock *pLock) {
-    struct task_struct *current = get_running_thread();
-    if (pLock->holder != current) {
-        //当前线程不是锁的持有者
-        //请求信号量
-        semaphore_down(&pLock->semaphore);
-        pLock->holder = current;
-        pLock->holder_rep = 1;
+/* 获取锁plock */
+void lock_acquire(struct lock *plock) {
+/* 排除曾经自己已经持有锁但还未将其释放的情况。*/
+    if (plock->holder != get_running_thread()) {
+        sema_down(&plock->semaphore);    // 对信号量P操作,原子操作
+        plock->holder = get_running_thread();
+        ASSERT(plock->holder_repeat_nr == 0);
+        plock->holder_repeat_nr = 1;
     } else {
-        pLock->holder_rep++;
+        plock->holder_repeat_nr++;
     }
 }
 
-//释放锁
-void lock_release(struct lock *pLock) {
-
-    ASSERT(pLock->holder == get_running_thread());
-    if (pLock->holder_rep > 1) {
-        pLock->holder_rep--;
+/* 释放锁plock */
+void lock_release(struct lock *plock) {
+    ASSERT(plock->holder == get_running_thread());
+    if (plock->holder_repeat_nr > 1) {
+        plock->holder_repeat_nr--;
         return;
     }
-    ASSERT(pLock->holder_rep == 1);
-    pLock->holder = NULL;
-    pLock->holder_rep = 0;
-    semaphore_up(&pLock->semaphore);
-}
-/*
+    ASSERT(plock->holder_repeat_nr == 1);
 
-//信号量初始化
-void semaphore_init(struct semaphore *semaphore, uint8_t value) {
-    semaphore->value = value;
-    thread_list_init(&semaphore->waits);
+    plock->holder = NULL;       // 把锁的持有者置空放在V操作之前
+    plock->holder_repeat_nr = 0;
+    sema_up(&plock->semaphore);       // 信号量的V操作,也是原子操作
 }
 
-//锁初始化
-void lock_init(struct lock *pLock) {
-    pLock->holder = NULL;
-    pLock->holder_rep = 0;
-    semaphore_init(&pLock->semaphore, 1);//将该锁的信号量值设置为1
-}
-
-//实现p操作
-void semaphore_down(struct semaphore *semaphore) {
-    saveInterAndDisable;
-    while (semaphore->value == 0) {
-        struct task_struct *current = get_running_thread();//获取当前线程
-        ASSERT(!elem_find(&semaphore->waits, &current->general_tag));
-        list_append(&semaphore->waits, &current->general_tag);//将当前线程放到该信号量的等待队列中
-        thread_block(TASK_BLOCKED);
-    }
-    semaphore->value--;
-    ASSERT(semaphore->value == 0);
-    reloadInter;
-}
-
-//实现v操作
-void semaphore_up(struct semaphore *semaphore) {
-    saveInterAndDisable;
-    ASSERT(semaphore->value == 0);
-    //判断当前信号量等待的队列是否为空，不为空则将等待的第一个弹出
-    if (!list_empty(&semaphore->waits)) {
-        struct list_elem *elem = list_pop(&semaphore->waits);//获取下一个需要信号量的线程
-        struct task_struct *blockedThread = elem2entry(struct task_struct, general_tag, elem);
-        thread_unblock(blockedThread);//将线程从阻塞状态改为就绪状态
-    }
-    semaphore->value++;
-    ASSERT(semaphore->value == 1);
-    reloadInter;
-}
-
-//申请锁
-void lock_require(struct lock *pLock) {
-    struct task_struct *current = get_running_thread();
-    if (pLock->holder != current) {
-        //如果当前锁的持有者不是自己
-        semaphore_down(&pLock->semaphore);//申请信号量
-        pLock->holder = current;
-        pLock->holder_rep = 1;
-    } else {
-        pLock->holder_rep++;
-    }
-}
-
-//释放锁
-void lock_release(struct lock *pLock) {
-    ASSERT(pLock->holder == get_running_thread());
-    if (pLock->holder_rep > 1) {
-        pLock->holder_rep--;
-        return;
-    }
-    ASSERT(pLock->holder_rep == 1);
-    pLock->holder = NULL;
-    pLock->holder_rep = 0;
-    semaphore_up(&pLock->semaphore);//释放信号量
-}*/

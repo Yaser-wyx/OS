@@ -73,3 +73,7 @@ void timer_init() {
     register_handler(0x20, intr_timer_handler);
     printf("timer init done!\n");
 }
+
+uint32_t get_time() {
+    return ticks;
+}

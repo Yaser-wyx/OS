@@ -13,10 +13,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf4f81d3-3bd0-466d-b19c-1691aefaf500" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/include/rand.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/rand.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/kernel.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/print_c.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/print_c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/chopsticks.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/console.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/console.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/philosopher.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/philosopher.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/sync.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/sync.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/timer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/print.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/print.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/kernel/sync.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/sync.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/kernel/thread.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/thread.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/device/console.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/console.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/device/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/timer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/chopsticks.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/philosopher.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/philosopher.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +123,7 @@
       <updated>1570604619845</updated>
       <workItem from="1570604622189" duration="65000" />
       <workItem from="1570786652324" duration="43763000" />
-      <workItem from="1570974113567" duration="8938000" />
+      <workItem from="1570974113567" duration="28846000" />
     </task>
     <task id="LOCAL-00001" summary="调整了代码目录结构">
       <created>1570800489534</created>
@@ -136,7 +153,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570978675200</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="review the P.V operation.">
+      <created>1571017584745</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1571017584745</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -162,6 +186,7 @@
     <MESSAGE value="add data of list." />
     <MESSAGE value="finished c9" />
     <MESSAGE value="complete lock mechanism." />
-    <option name="LAST_COMMIT_MESSAGE" value="complete lock mechanism." />
+    <MESSAGE value="review the P.V operation." />
+    <option name="LAST_COMMIT_MESSAGE" value="review the P.V operation." />
   </component>
 </project>

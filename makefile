@@ -14,10 +14,11 @@ OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/init.o $(BUILD_DIR)/interrupt.o \
       $(BUILD_DIR)/print_c.o $(BUILD_DIR)/debug.o  $(BUILD_DIR)/memory.o \
       $(BUILD_DIR)/bitmap.o $(BUILD_DIR)/string.o $(BUILD_DIR)/thread.o \
       $(BUILD_DIR)/switch.o $(BUILD_DIR)/thread_list.o $(BUILD_DIR)/console.o\
-	  $(BUILD_DIR)/sync.o
+	  $(BUILD_DIR)/sync.o $(BUILD_DIR)/philosopher.o $(BUILD_DIR)/rand.o
 
 ##############     c代码编译     ###############
-$(BUILD_DIR)/main.o: src/kernel/main.c include/thread.h include/interrupt.h include/print.h  include/stdint.h include/init.h
+$(BUILD_DIR)/main.o: src/kernel/main.c include/thread.h include/interrupt.h include/print.h  include/stdint.h include/init.h\
+        include/rand.h include/timer.h
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/init.o: src/kernel/init.c include/init.h include/print.h \
@@ -68,6 +69,12 @@ $(BUILD_DIR)/console.o: src/device/console.c include/console.h include/stdint.h 
 $(BUILD_DIR)/sync.o: lib/kernel/sync.c include/sync.h include/thread_list.h include/global.h \
        	include/stdint.h include/thread.h include/string.h include/stdint.h include/debug.h \
 		include/interrupt.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/philosopher.o: src/test/philosopher.c include/sync.h include/philosopher.h include/console.h \
+        include/stdint.h
+	$(CC) $(CFLAGS) $< -o $@
+$(BUILD_DIR)/rand.o: lib/kernel/rand.c include/rand.h include/stdint.h
 	$(CC) $(CFLAGS) $< -o $@
 
 ##############    汇编代码编译    ###############

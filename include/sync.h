@@ -1,34 +1,33 @@
-//
-// Created by wanyu on 2019/10/13.
-//
+#ifndef __THREAD_SYNC_H
+#define __THREAD_SYNC_H
 
-#ifndef OS_SYNC_H
-#define OS_SYNC_H
-
+#include "thread_list.h"
 #include "stdint.h"
 #include "thread.h"
-#include "thread_list.h"
 
-//定义信号量
+/* 信号量结构 */
 struct semaphore {
-  uint8_t value;      //信号量的值
-  struct list waits;  //在该信号量上等待的线程
+    uint8_t value;
+    struct list waiters;
 };
-//定义锁
+
+/* 锁结构 */
 struct lock {
-  struct task_struct *holder;  //锁的持有者
-  struct semaphore semaphore;  //锁的信号量
-  uint32_t holder_rep;
+    struct task_struct *holder;        // 锁的持有者
+    struct semaphore semaphore;        // 用二元信号量实现锁
+    uint32_t holder_repeat_nr;            // 锁的持有者重复申请锁的次数
 };
 
-void lock_init(struct lock *pLock);
+void sema_init(struct semaphore *psema, uint8_t value);
 
-void lock_release(struct lock *pLock);
+void sema_down(struct semaphore *psema);
 
-void lock_require(struct lock *pLock);
+void sema_up(struct semaphore *psema);
 
-void semaphore_up(struct semaphore *semaphore);
+void lock_init(struct lock *plock ,uint32_t value);
 
-void semaphore_down(struct semaphore *semaphore);
+void lock_acquire(struct lock *plock);
 
-#endif  // OS_SYNC_H
+void lock_release(struct lock *plock);
+
+#endif
