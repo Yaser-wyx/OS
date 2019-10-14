@@ -121,9 +121,9 @@ void schedule() {
 //将当前线程阻塞
 void thread_block(enum task_status state) {
     saveInterAndDisable;
-    ASSERT(state != TASK_RUNNING || state != TASK_READY);
-    struct task_struct *current = get_running_thread();//获取当前线程
-    current->status = state;
+    ASSERT(state == TASK_BLOCKED || state == TASK_WAITING || state == TASK_HANGING);
+    struct task_struct *current_thread = get_running_thread();//获取当前运行中的线程
+    current_thread->status = state;
     schedule();
     reloadInter;
 }
@@ -131,9 +131,15 @@ void thread_block(enum task_status state) {
 //释放指定的线程
 void thread_unblock(struct task_struct *blocked_thread) {
     saveInterAndDisable;
+    ASSERT(blocked_thread->status != TASK_READY || blocked_thread != TASK_RUNNING);
+    blocked_thread->status = TASK_READY;//将阻塞线程重新切换至就绪状态
+    ASSERT(elem_find(&thread_ready_list, &blocked_thread->general_tag));
+    list_push(&thread_ready_list, &blocked_thread->general_tag);
+    reloadInter;
+    /*saveInterAndDisable;
     ASSERT(blocked_thread->status != TASK_READY || blocked_thread->status != TASK_RUNNING);
     ASSERT(elem_find(&thread_ready_list, &blocked_thread->general_tag));
     blocked_thread->status = TASK_READY;
     list_push(&thread_ready_list, &blocked_thread->general_tag);
-    reloadInter;
+    reloadInter;*/
 }

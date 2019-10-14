@@ -7,7 +7,73 @@
 #include "debug.h"
 #include "interrupt.h"
 
-void thread_block(enum task_status status);
+
+//信号量初始化
+void semaphore_init(struct semaphore *semaphore, uint8_t value) {
+    semaphore->value = value;
+    thread_list_init(&semaphore->waits);
+}
+
+//锁初始化
+void lock_init(struct lock *pLock) {
+    pLock->holder = NULL;
+    pLock->holder_rep = 0;
+    semaphore_init(&pLock->semaphore, 1);
+}
+
+//信号量P操作
+void semaphore_down(struct semaphore *semaphore) {
+    saveInterAndDisable;
+
+    while (semaphore->value == 0) {
+        //如果一直获取不到信号量，则当前线程持续阻塞，同时将自己放入到该信号量的等待队列中
+        list_append(&semaphore->waits, &get_running_thread()->general_tag);
+        thread_block(TASK_BLOCKED);
+    }
+    ASSERT(semaphore->value == 1);
+    semaphore->value--;//获得信号量
+    reloadInter;
+}
+
+//信号量V操作
+void semaphore_up(struct semaphore *semaphore) {
+    saveInterAndDisable;
+    if (!list_empty(&semaphore->waits)) {
+        struct task_struct *blocked_thread = elem2entry(struct task_struct, general_tag, list_pop(&semaphore->waits));
+        thread_unblock(blocked_thread);//将阻塞的线程从阻塞状态恢复
+    }
+    semaphore->value++;
+    reloadInter;
+}
+
+//请求锁
+void lock_require(struct lock *pLock) {
+    struct task_struct *current = get_running_thread();
+    if (pLock->holder != current) {
+        //当前线程不是锁的持有者
+        //请求信号量
+        semaphore_down(&pLock->semaphore);
+        pLock->holder = current;
+        pLock->holder_rep = 1;
+    } else {
+        pLock->holder_rep++;
+    }
+}
+
+//释放锁
+void lock_release(struct lock *pLock) {
+
+    ASSERT(pLock->holder == get_running_thread());
+    if (pLock->holder_rep > 1) {
+        pLock->holder_rep--;
+        return;
+    }
+    ASSERT(pLock->holder_rep == 1);
+    pLock->holder = NULL;
+    pLock->holder_rep = 0;
+    semaphore_up(&pLock->semaphore);
+}
+/*
 
 //信号量初始化
 void semaphore_init(struct semaphore *semaphore, uint8_t value) {
@@ -75,4 +141,4 @@ void lock_release(struct lock *pLock) {
     pLock->holder = NULL;
     pLock->holder_rep = 0;
     semaphore_up(&pLock->semaphore);//释放信号量
-}
+}*/
