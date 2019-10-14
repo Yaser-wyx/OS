@@ -10,7 +10,11 @@
         "string.h": "c",
         "bitmap.h": "c",
         "memory.h": "c",
-        "thread.h": "c"
+        "thread.h": "c",
+        "sync.h": "c",
+        "console.h": "c",
+        "thread_list.h": "c",
+        "chopsticks.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

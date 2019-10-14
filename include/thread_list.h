@@ -1,5 +1,5 @@
 #ifndef __LIB_THREAD_LIST_H
-#define __LIB_LIST_H
+#define __LIB_THREAD_LIST_H
 
 #include "global.h"
 
@@ -27,8 +27,7 @@ void remove_list_elem(struct list_elem *elem);
 struct list_elem *list_pop(struct list *thread_list);
 bool list_empty(struct list *thread_list);
 bool elem_find(struct list *thread_list, struct list_elem *elem);
-struct list_elem *list_traversal(struct list *thread_list, function func,
-                                 int arg);
+struct list_elem *list_traversal(struct list *thread_list, function func,int arg);
 uint32_t list_len(struct list *thread_list);
 
 #endif

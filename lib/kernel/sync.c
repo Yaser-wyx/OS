@@ -2,7 +2,6 @@
 // Created by wanyu on 2019/10/13.
 //
 #include "sync.h"
-#include "thread_list.h"
 #include "global.h"
 #include "debug.h"
 #include "interrupt.h"

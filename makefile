@@ -13,7 +13,8 @@ OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/init.o $(BUILD_DIR)/interrupt.o \
       $(BUILD_DIR)/timer.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/print.o \
       $(BUILD_DIR)/print_c.o $(BUILD_DIR)/debug.o  $(BUILD_DIR)/memory.o \
       $(BUILD_DIR)/bitmap.o $(BUILD_DIR)/string.o $(BUILD_DIR)/thread.o \
-      $(BUILD_DIR)/switch.o $(BUILD_DIR)/thread_list.o
+      $(BUILD_DIR)/switch.o $(BUILD_DIR)/thread_list.o $(BUILD_DIR)/console.o\
+	  $(BUILD_DIR)/sync.o
 
 ##############     c代码编译     ###############
 $(BUILD_DIR)/main.o: src/kernel/main.c include/thread.h include/interrupt.h include/print.h  include/stdint.h include/init.h
@@ -57,6 +58,16 @@ $(BUILD_DIR)/thread_list.o: lib/kernel/thread_list.c  include/global.h include/s
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/thread.o: lib/kernel/thread.c include/thread.h include/stdint.h include/global.h include/bitmap.h include/memory.h include/string.h include/print.h include/interrupt.h include/debug.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/console.o: src/device/console.c include/console.h include/stdint.h \
+        include/print.h include/sync.h include/thread_list.h include/global.h \
+     	include/thread.h 
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/sync.o: lib/kernel/sync.c include/sync.h include/thread_list.h include/global.h \
+       	include/stdint.h include/thread.h include/string.h include/stdint.h include/debug.h \
+		include/interrupt.h
 	$(CC) $(CFLAGS) $< -o $@
 
 ##############    汇编代码编译    ###############

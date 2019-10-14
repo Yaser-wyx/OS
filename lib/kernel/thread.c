@@ -133,7 +133,7 @@ void thread_unblock(struct task_struct *blocked_thread) {
     saveInterAndDisable;
     ASSERT(blocked_thread->status != TASK_READY || blocked_thread != TASK_RUNNING);
     blocked_thread->status = TASK_READY;//将阻塞线程重新切换至就绪状态
-    ASSERT(elem_find(&thread_ready_list, &blocked_thread->general_tag));
+    ASSERT(!elem_find(&thread_ready_list, &blocked_thread->general_tag));
     list_push(&thread_ready_list, &blocked_thread->general_tag);
     reloadInter;
     /*saveInterAndDisable;
