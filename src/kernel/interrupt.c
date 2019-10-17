@@ -4,12 +4,11 @@
 #include "print.h"
 #include "stdint.h"
 
-#define IDT_CNT 33
+#define IDT_CNT 0x30
 #define PIC_M_CTRL 0x20
 #define PIC_M_DATA 0x21
 #define PIC_S_CTRL 0xa0
 #define PIC_S_DATA 0xa1
-
 #define EFLAGS_IF 0X00000200  //将eflags的if位置1
 #define GET_EFLAGS(eflags_value) \
   __asm__ volatile("pushfl; popl %0" : "=g"(eflags_value))
@@ -114,9 +113,12 @@ static void handle_pic_init() {
     outb(PIC_S_DATA, 0x02);
     outb(PIC_S_DATA, 0x01);
     //开启指定中断号
-    outb(PIC_M_DATA, 0xfe);
+
+    outb(PIC_M_DATA, 0Xfd);//开启键盘中断
     outb(PIC_S_DATA, 0xff);
+
     printf("8259A chip init done!\n");
+
 }
 
 void idt_init() {  //初始化中断描述符表
