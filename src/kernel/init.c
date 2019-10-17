@@ -24,6 +24,7 @@ void init_all() {
 
     printf("init console!\n");
     console_init();
+
     printf("init keyboard!\n");
     keyboard_init();
 

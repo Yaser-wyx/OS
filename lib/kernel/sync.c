@@ -20,7 +20,7 @@ void lock_init(struct lock *plock, uint32_t value) {
 /* 信号量down操作 */
 void sema_down(struct semaphore *psema) {
 /* 关中断来保证原子操作 */
-    enum intr_status old_status = intr_disable();
+    saveInterAndDisable;
     while (psema->value == 0) {    // 若value为0,表示已经被别人持有
         ASSERT(!elem_find(&psema->waiters, &get_running_thread()->general_tag));
         /* 当前线程不应该已在信号量的waiters队列中 */
@@ -34,20 +34,20 @@ void sema_down(struct semaphore *psema) {
 /* 若value为1或被唤醒后,会执行下面的代码,也就是获得了锁。*/
     psema->value--;
 /* 恢复之前的中断状态 */
-    set_intr_status(old_status);
+    reloadInter;
 }
 
 /* 信号量的up操作 */
 void sema_up(struct semaphore *psema) {
 /* 关中断,保证原子操作 */
-    enum intr_status old_status = intr_disable();
+    saveInterAndDisable;
     if (!list_empty(&psema->waiters)) {
         struct task_struct *thread_blocked = elem2entry(struct task_struct, general_tag, list_pop(&psema->waiters));
         thread_unblock(thread_blocked);
     }
     psema->value++;
 /* 恢复之前的中断状态 */
-    set_intr_status(old_status);
+    reloadInter;
 }
 
 /* 获取锁plock */

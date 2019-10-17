@@ -114,7 +114,7 @@ static void handle_pic_init() {
     outb(PIC_S_DATA, 0x01);
     //开启指定中断号
 
-    outb(PIC_M_DATA, 0Xfd);//开启键盘中断
+    outb(PIC_M_DATA, 0Xfc);//开启键盘、时钟中断
     outb(PIC_S_DATA, 0xff);
 
     printf("8259A chip init done!\n");
@@ -162,5 +162,5 @@ enum intr_status get_intr_status() {
 }
 
 enum intr_status set_intr_status(enum intr_status status) {
-    return status & INTR_OFF ? intr_disable() : intr_enable();
+    return status == INTR_OFF ? intr_disable() : intr_enable();
 }

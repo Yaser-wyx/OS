@@ -6,6 +6,7 @@
 #include "interrupt.h"
 #include "io.h"
 #include "global.h"
+#include "ioqueue.h"
 
 #define esc '\033'
 #define backspace '\b'
@@ -34,7 +35,7 @@
 #define ctrl_r_make    0xe01d
 #define ctrl_r_break    0xe09d
 #define caps_lock_make    0x3a
-
+struct ioqueue keyboard_buf;//键盘环形缓冲区
 static bool ctrl_status, shift_status, alt_status, caps_lock_status, ext_scancode;
 
 
@@ -169,7 +170,9 @@ static void intr_keyboard_handler(void) {
     bool shift_down_last = shift_status;
     bool caps_lock_last = caps_lock_status;
     bool break_code;
-
+    printf("\nget_intr_status: ");
+    printInt(get_intr_status());
+    printf("\n");
     uint16_t scan_code = inb(KBD_BUF_PORT);//从输出缓冲区读取数据，刷新键盘中断处理
 
     if (scan_code == 0xe0) {
@@ -221,7 +224,15 @@ static void intr_keyboard_handler(void) {
         uint8_t index = (scan_code &= 0x00ff);
         char cur_char = keymap[index][shift];
         if (cur_char) {
-            put_char(cur_char);
+            if ((ctrl_down_last && cur_char == 'l') || (ctrl_down_last && cur_char == 'u')) {
+                cur_char -= 'a';
+            }
+
+            if (!ioq_full(&keyboard_buf)) {
+                ioq_putchar(&keyboard_buf, cur_char);
+            } else {
+                printf("\nioqueue is full!\n");
+            }
             return;
         }
         if (scan_code == ctrl_r_make || scan_code == ctrl_l_make) {
@@ -241,5 +252,6 @@ static void intr_keyboard_handler(void) {
 void keyboard_init() {
     printf("keyboard init start\n");
     register_handler(0x21, intr_keyboard_handler);
+    ioqueue_init(&keyboard_buf);
     printf("keyboard init done\n");
 }

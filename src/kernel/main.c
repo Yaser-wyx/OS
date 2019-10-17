@@ -3,30 +3,36 @@
 #include "interrupt.h"
 #include "print.h"
 #include "thread.h"
-#include "philosopher.h"
 #include "rand.h"
-#include "timer.h"
+#include "global.h"
+#include "keyboard.h"
+#include "ioqueue.h"
 
-void testA(void *arg) {
-    struct philosopher *philosopher = arg;
-    while (true) {
-        srand(get_time());
-        if (rand() % 2) {
-            think(philosopher);
-        }
-        if (rand() % 2) {
-            eat(philosopher);
-        }
-    }
-}
+void k_thread(void *);
 
 int main(void) {
     printf("\nkernel start done!\n");
     init_all();
-
+    thread_start("thread_a", 20, k_thread, "A:");
+    thread_start("thread_b", 20, k_thread, "B:");
     intr_enable();
     while (1) {
 
 //        printf("\nkernel start done!\n");
+    }
+}
+
+void k_thread(void *arg) {
+    while (true) {
+        saveInterAndDisable;
+
+        if (!ioq_empty(&keyboard_buf)) {
+
+            console_printf(arg);
+
+            char byte = ioq_getchar(&keyboard_buf);
+            console_putchar(byte);
+        }
+        reloadInter;
     }
 }

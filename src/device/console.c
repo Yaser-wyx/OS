@@ -18,6 +18,7 @@ void release_console() { lock_release(&console_lock); }
 
 //使用终端输出字符串
 void console_printf(char *str) {
+
     get_console();
     printf(str);
     release_console();

@@ -1,6 +1,7 @@
 //
 // Created by wanyu on 2019/10/17.
 //
+#include "print.h"
 #include "ioqueue.h"
 #include "interrupt.h"
 #include "global.h"
@@ -42,6 +43,7 @@ void ioq_wake(struct task_struct **waiter) {
 
 //消费者获取数据
 char ioq_getchar(struct ioqueue *ioqueue) {
+
     INTR_IS_OFF;
     while (ioq_empty(ioqueue)) {
         //如果缓冲区为空

@@ -18,4 +18,19 @@ struct ioqueue {
     int32_t head;//队头
     int32_t tail;//队尾
 };
+
+void ioqueue_init(struct ioqueue *ioqueue);
+
+bool ioq_full(struct ioqueue *ioqueue);
+
+bool ioq_empty(struct ioqueue *ioqueue);
+
+void ioq_wait(struct task_struct **waiter);
+
+void ioq_wake(struct task_struct **waiter);
+
+char ioq_getchar(struct ioqueue *ioqueue);
+
+void ioq_putchar(struct ioqueue *ioqueue, char byte);
+
 #endif //OS_IOQUEUE_H
