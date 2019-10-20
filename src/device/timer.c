@@ -60,6 +60,7 @@ static void intr_timer_handler(void) {
     ticks++;
 
     if (currect_task->ticks == 0) {
+        //如果该线程时间片用尽了，则进行调度
         schedule();
     } else {
         currect_task->ticks--;

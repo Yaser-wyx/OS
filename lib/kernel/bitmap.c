@@ -5,7 +5,7 @@
 
 // 初始化位图
 void bitmap_init(struct bitmap *btmp) {
-    memset(btmp->bits, 0, btmp->btmp_bytes_len);
+    memset(btmp->bits, btmp->btmp_bytes_len,0 );
 }
 // 判断bit_idx位是否为1，如果为1，则返回true，否则返回false
 bool bitmap_scan_test(struct bitmap *btmp, uint32_t bit_idx) {

@@ -15,7 +15,7 @@ OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/init.o $(BUILD_DIR)/interrupt.o \
       $(BUILD_DIR)/bitmap.o $(BUILD_DIR)/string.o $(BUILD_DIR)/thread.o \
       $(BUILD_DIR)/switch.o $(BUILD_DIR)/thread_list.o $(BUILD_DIR)/console.o\
 	  $(BUILD_DIR)/sync.o $(BUILD_DIR)/philosopher.o $(BUILD_DIR)/rand.o \
-	  $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/ioqueue.o
+	  $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/ioqueue.o $(BUILD_DIR)/tss.o
 
 ##############     c代码编译     ###############
 $(BUILD_DIR)/main.o: src/kernel/main.c include/thread.h include/interrupt.h include/print.h  include/stdint.h include/init.h\
@@ -23,7 +23,7 @@ $(BUILD_DIR)/main.o: src/kernel/main.c include/thread.h include/interrupt.h incl
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/init.o: src/kernel/init.c include/init.h include/print.h \
-         include/stdint.h include/interrupt.h include/timer.h
+         include/stdint.h include/interrupt.h include/timer.h include/tss.h
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/print_c.o: lib/kernel/print.c include/stdint.h include/print.h
@@ -86,6 +86,11 @@ $(BUILD_DIR)/keyboard.o: src/device/keyboard.c include/keyboard.h include/print.
 $(BUILD_DIR)/ioqueue.o: src/device/ioqueue.c include/ioqueue.h include/stdint.h include/thread.h \
         include/thread_list.h include/global.h include/sync.h  include/interrupt.h \
         include/debug.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/tss.o: src/user/tss.c include/tss.h include/thread.h include/stdint.h \
+    	include/thread_list.h include/global.h include/string.h include/stdint.h \
+     	include/print.h
 	$(CC) $(CFLAGS) $< -o $@
 
 ##############    汇编代码编译    ###############

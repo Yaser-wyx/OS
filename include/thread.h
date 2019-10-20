@@ -3,6 +3,8 @@
 
 #include "stdint.h"
 #include "thread_list.h"
+#include "bitmap.h"
+#include "memory.h"
 
 //定义自定义函数类型
 typedef void thread_func(void *);
@@ -52,25 +54,25 @@ struct thread_stack {
 
     void (*eip)(thread_func *func, void *func_arg);
 
-    void *unused_retaddr;   //站位地址，作为被调用函数的栈顶
+    void *unused_retaddr;   //占位地址，作为被调用函数的栈顶
     thread_func *function;  //线程调用的函数
     void *func_arg;         //线程调用函数的参数
 };
 
 //线程或进程的PCB
 struct task_struct {
-    uint32_t *self_kstack;  //内核栈顶指针
-    enum task_status status;  //当前线程或进程状态
-    uint8_t priority;         //优先级
+    uint32_t *self_kstack;          //内核栈顶指针
+    enum task_status status;        //当前线程或进程状态
+    uint8_t priority;               //优先级
     char name[16];
-    uint8_t ticks;           //每次上cpu执行的时间
-    uint32_t elapsed_ticks;  //此任务已经占用了多少cpu时间
+    uint8_t ticks;                  //每次上cpu执行的时间
+    uint32_t elapsed_ticks;         //此任务已经占用了多少cpu时间
 
     struct list_elem general_tag;
     struct list_elem all_list_tag;
-    uint32_t *pgdir;  //页表地址
-
-    uint32_t stack_magic;   //检测栈溢出
+    uint32_t *pgdir;                //进程页表的虚拟地址
+    struct virtual_addr user_vaddr; //用户虚拟地址空间
+    uint32_t stack_magic;           //检测栈溢出
 };
 
 struct task_struct *thread_start(char *name, int priority, thread_func func, void *func_arg);

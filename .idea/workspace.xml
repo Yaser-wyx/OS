@@ -13,21 +13,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf4f81d3-3bd0-466d-b19c-1691aefaf500" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/include/process.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/tss.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/user/process.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/user/tss.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/init.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/init.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/interrupt.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/interrupt.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/kernel.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/global.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/global.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/ioqueue.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/ioqueue.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/keyboard.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/keyboard.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/sync.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/sync.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/memory.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/memory.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/thread.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/thread.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/bitmap.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/bitmap.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/thread.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/thread.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/device/console.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/console.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/device/ioqueue.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/ioqueue.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/device/keyboard.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/keyboard.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/device/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/timer.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/kernel/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/init.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kernel/interrupt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/interrupt.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kernel/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/memory.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/memory.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool.sh" beforeDir="false" afterPath="$PROJECT_DIR$/tool.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,6 +42,7 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
+    <option name="clangWarnings" value="-Wno-unused-variable,-Werror=implicit-function-declaration,-Wshadow,-Wno-shadow-field-in-constructor-modified,-Wno-shadow-ivar,-Wno-pointer-sign" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FavoritesManager">
@@ -118,7 +124,8 @@
       <workItem from="1570604622189" duration="65000" />
       <workItem from="1570786652324" duration="43763000" />
       <workItem from="1570974113567" duration="36207000" />
-      <workItem from="1571229600479" duration="13559000" />
+      <workItem from="1571229600479" duration="27186000" />
+      <workItem from="1571460559295" duration="24609000" />
     </task>
     <task id="LOCAL-00001" summary="调整了代码目录结构">
       <created>1570800489534</created>
@@ -169,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571276964441</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="finished c10.">
+      <created>1571305138413</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1571305138413</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,6 +212,7 @@
     <MESSAGE value="review the P.V operation." />
     <MESSAGE value="添加了哲学家进餐问题的解决方案&#10;增加了rand函数" />
     <MESSAGE value="add keyboard drive.&#10;add io_queue" />
-    <option name="LAST_COMMIT_MESSAGE" value="add keyboard drive.&#10;add io_queue" />
+    <MESSAGE value="finished c10." />
+    <option name="LAST_COMMIT_MESSAGE" value="finished c10." />
   </component>
 </project>

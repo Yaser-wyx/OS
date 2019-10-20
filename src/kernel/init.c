@@ -6,6 +6,7 @@
 #include "thread.h"
 #include "timer.h"
 #include "keyboard.h"
+#include "tss.h"
 
 void init_all() {
     printf("init_all\n");
@@ -27,6 +28,8 @@ void init_all() {
 
     printf("init keyboard!\n");
     keyboard_init();
+
+    tss_init();
 
     printf("init all done!\n");
 }

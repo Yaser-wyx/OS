@@ -11,7 +11,6 @@
 struct task_struct *main_thread;      //主线程pcb
 struct list thread_ready_list;        //就绪队列
 struct list thread_all_list;          //所有任务队列
-//static struct list_elem *thread_tag;  //队列线程节点
 
 //线程切换
 extern void switch_to(struct task_struct *current, struct task_struct *next);
@@ -85,8 +84,7 @@ void init_thread_pcb(struct task_struct *thread_pcb, char *name, int priority) {
 }
 
 //创建线程
-void create_thread(struct task_struct *thread_pcb, thread_func func,
-                   void *func_arg) {
+void create_thread(struct task_struct *thread_pcb, thread_func func, void *func_arg) {
     //预留中断栈以及线程栈的使用空间
     thread_pcb->self_kstack -= (sizeof(struct intr_stack) + sizeof(struct thread_stack));
     struct thread_stack *kthread_stack = (struct thread_stack *) thread_pcb->self_kstack;
@@ -97,11 +95,12 @@ void create_thread(struct task_struct *thread_pcb, thread_func func,
     kthread_stack->esi = kthread_stack->edi = kthread_stack->ebx = kthread_stack->ebp = 0;
 }
 
+//调度算法：时间片轮转法
 void schedule() {
     ASSERT(get_intr_status() == INTR_OFF);
     //获取当前运行中的线程
     struct task_struct *current_task = get_running_thread();
-    if (current_task->status == TASK_RUNNING ) {//当前线程处于运行状态，同时时间片已经用完了
+    if (current_task->status == TASK_RUNNING) {//当前线程处于运行状态，同时时间片已经用完了
         ASSERT(!elem_find(&thread_ready_list, &current_task->general_tag));//确保其不在ready队列中
         current_task->status = TASK_READY;
         current_task->ticks = current_task->priority;
@@ -138,10 +137,4 @@ void thread_unblock(struct task_struct *blocked_thread) {
         list_push(&thread_ready_list, &blocked_thread->general_tag);
     }
     reloadInter;
-    /*saveInterAndDisable;
-    ASSERT(blocked_thread->status != TASK_READY || blocked_thread->status != TASK_RUNNING);
-    ASSERT(elem_find(&thread_ready_list, &blocked_thread->general_tag));
-    blocked_thread->status = TASK_READY;
-    list_push(&thread_ready_list, &blocked_thread->general_tag);
-    reloadInter;*/
 }
