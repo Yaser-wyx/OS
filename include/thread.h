@@ -8,7 +8,8 @@
 
 //定义自定义函数类型
 typedef void thread_func(void *);
-
+extern struct list thread_ready_list;
+extern struct list thread_all_list;
 //定义线程或进程状态
 enum task_status {
     TASK_RUNNING,

@@ -84,6 +84,7 @@ void memset(void* _dist_, uint32_t size, uint32_t value) {
   }
 }
 //将指定个数的字符串复制到指定位置
+//todo check
 void memcpy(void* _dist_, const void* _src_, uint32_t size) {
   ASSERT(_dist_ != NULL && _src_ != NULL);
 

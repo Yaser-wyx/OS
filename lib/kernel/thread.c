@@ -5,6 +5,7 @@
 #include "memory.h"
 #include "string.h"
 #include "print.h"
+#include "process.h"
 
 #define PAGE_SIZE 4096
 
@@ -114,6 +115,7 @@ void schedule() {
     struct list_elem *thread_tag = list_pop(&thread_ready_list);
     struct task_struct *new_task = elem2entry(struct task_struct, general_tag, thread_tag);
     new_task->status = TASK_RUNNING;
+    process_active(new_task);
     switch_to(current_task, new_task);
 }
 

@@ -15,7 +15,8 @@ OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/init.o $(BUILD_DIR)/interrupt.o \
       $(BUILD_DIR)/bitmap.o $(BUILD_DIR)/string.o $(BUILD_DIR)/thread.o \
       $(BUILD_DIR)/switch.o $(BUILD_DIR)/thread_list.o $(BUILD_DIR)/console.o\
 	  $(BUILD_DIR)/sync.o $(BUILD_DIR)/philosopher.o $(BUILD_DIR)/rand.o \
-	  $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/ioqueue.o $(BUILD_DIR)/tss.o
+	  $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/ioqueue.o $(BUILD_DIR)/tss.o \
+	  $(BUILD_DIR)/process.o
 
 ##############     c代码编译     ###############
 $(BUILD_DIR)/main.o: src/kernel/main.c include/thread.h include/interrupt.h include/print.h  include/stdint.h include/init.h\
@@ -92,7 +93,11 @@ $(BUILD_DIR)/tss.o: src/user/tss.c include/tss.h include/thread.h include/stdint
     	include/thread_list.h include/global.h include/string.h include/stdint.h \
      	include/print.h
 	$(CC) $(CFLAGS) $< -o $@
-
+$(BUILD_DIR)/process.o: src/user/process.c include/process.h include/thread.h \
+    	include/stdint.h include/thread_list.h include/global.h include/debug.h \
+     	include/memory.h include/bitmap.h include/tss.h include/interrupt.h \
+      	include/string.h include/stdint.h
+	$(CC) $(CFLAGS) $< -o $@
 ##############    汇编代码编译    ###############
 $(BUILD_DIR)/kernel.o: src/kernel/kernel.asm
 	$(AS) $(ASFLAGS) $< -o $@

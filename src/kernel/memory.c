@@ -69,12 +69,12 @@ static void *palloc(struct pool *m_pool) {
 }
 
 //向页表中添加一条记录，表示新增的物理页
+//todo
 static void page_table_add(void *_vaddr, void *_page_phyaddr) {
     uint32_t vaddr = (uint32_t) _vaddr;//虚拟地址
     uint32_t page_phyaddr = (uint32_t) _page_phyaddr;//物理地址
     uint32_t *pde = pde_ptr(vaddr);//获取虚拟地址的ped
     uint32_t *pte = pte_ptr(vaddr);//获取pte
-    ASSERT(!(*pte) & 0x1);
     if (!(*pde & 0x1)) {
         //如果pde不存在，就从内核空间中分配一页框
         uint32_t pde_phyaddr = (uint32_t) palloc(&kernel_pool);
@@ -82,6 +82,7 @@ static void page_table_add(void *_vaddr, void *_page_phyaddr) {
         *pde = (pde_phyaddr | PG_US_U | PG_RW_W | PG_P_1);
         memset((void *) ((int) pte & 0xfffff000), PG_SIZE, 0);  //将新的物理页清空为0
     }
+    ASSERT(!(*pte & 0x00000001));
     *pte = (page_phyaddr | PG_US_U | PG_RW_W | PG_P_1);
 }
 
@@ -149,6 +150,7 @@ void *get_user_pages(uint32_t pg_cnt) {
 }
 
 //指定虚拟地址，将该虚拟地址映射到指定内存池中分配的物理地址上
+//todo check
 void *get_a_page(enum pool_flags pf, uint32_t vaddr) {
     struct pool *mem_pool = pf == PF_KERNEL ? &kernel_pool : &user_pool;
     lock_acquire(&mem_pool->lock);
@@ -176,6 +178,7 @@ void *get_a_page(enum pool_flags pf, uint32_t vaddr) {
     return (void *) vaddr;
 }
 
+//todo check
 uint32_t addr_v2p(uint32_t vaddr) {
     uint32_t *pte = pte_ptr(vaddr);
     return ((*pte) & 0xfffff000) | (vaddr & 0x00000fff);
