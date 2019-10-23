@@ -1,80 +1,56 @@
 #include "timer.h"
-#include "debug.h"
-#include "interrupt.h"
 #include "io.h"
 #include "print.h"
-#include "stdint.h"
+#include "interrupt.h"
 #include "thread.h"
+#include "debug.h"
 
-const uint32_t FREQUENCY = 1193180;
-const uint32_t IRQ0_FREQUENCY = 100;
-static uint32_t ticks;  //自内核开启中断以来总共的滴答数
-#define CTRL_PORT 0x43
-#define TIMER_NO_0 0
-#define TIMER_NO_1 1
-#define TIMER_NO_2 2
+#define IRQ0_FREQUENCY	   100
+#define INPUT_FREQUENCY	   1193180
+#define COUNTER0_VALUE	   INPUT_FREQUENCY / IRQ0_FREQUENCY
+#define CONTRER0_PORT	   0x40
+#define COUNTER0_NO	   0
+#define COUNTER_MODE	   2
+#define READ_WRITE_LATCH   3
+#define PIT_CONTROL_PORT   0x43
 
-#define RW_MODE_CPU 0
-#define RW_MODE_LOW 1
-#define RW_MODE_HIGHT 2
-#define RW_MODE_LOW_HIGHT 3
+uint32_t ticks;          // ticks是内核自中断开启以来总共的嘀嗒数
 
-#define WORK_MODE_0 0
-#define WORK_MODE_1 1
-#define WORK_MODE_2 2
-#define WORK_MODE_3 3
-#define WORK_MODE_4 4
-#define WORK_MODE_5 5
-
-#define NUM_SYS_BIN 0
-#define NUM_SYS_BCD 1
-
-#define TIMER_0 0x40
-#define TIMER_1 0x41
-#define TIMER_2 0x42
-
-static void
-setup_timer(uint8_t timer_no, uint8_t rw, uint8_t mode, uint8_t num_sys, uint16_t timer_value, uint8_t timer_port) {
-    printf("timer value:");
-    printInt(timer_value);
-    printf("\n");
-    uint8_t ctrl_8253 = (uint8_t) (timer_no << 6 | rw << 4 | mode << 1 | num_sys);
-    printInt(ctrl_8253);
-    printf("\n");
-    outb(CTRL_PORT, ctrl_8253);
-    //设置低地址
-    outb(timer_port, (uint8_t) timer_value);
-    //设置高地址
-    outb(timer_port, (uint8_t) (timer_value >> 8));
+/* 把操作的计数器counter_no、读写锁属性rwl、计数器模式counter_mode写入模式控制寄存器并赋予初始值counter_value */
+static void frequency_set(uint8_t counter_port, \
+			  uint8_t counter_no, \
+			  uint8_t rwl, \
+			  uint8_t counter_mode, \
+			  uint16_t counter_value) {
+/* 往控制字寄存器端口0x43中写入控制字 */
+   outb(PIT_CONTROL_PORT, (uint8_t)(counter_no << 6 | rwl << 4 | counter_mode << 1));
+/* 先写入counter_value的低8位 */
+   outb(counter_port, (uint8_t)counter_value);
+/* 再写入counter_value的高8位 */
+   outb(counter_port, (uint8_t)counter_value >> 8);
 }
 
-//时钟中断处理函数
+/* 时钟的中断处理函数 */
 static void intr_timer_handler(void) {
-    //任务：
-    //将当前运行中的线程已用cpu时间+1
-    //判断当前线程的时间片是否已经用完，
-    //如果用完了，则进行调度，否则将剩余时间片-1
-    struct task_struct *currect_task = get_running_thread();
-    ASSERT(currect_task->stack_magic == 0x52013140);
-    currect_task->elapsed_ticks++;
-    ticks++;
+   struct task_struct* cur_thread = running_thread();
 
-    if (currect_task->ticks == 0) {
-        //如果该线程时间片用尽了，则进行调度
-        schedule();
-    } else {
-        currect_task->ticks--;
-    }
+   ASSERT(cur_thread->stack_magic == 0x19870916);         // 检查栈是否溢出
+
+   cur_thread->elapsed_ticks++;	  // 记录此线程占用的cpu时间嘀
+   ticks++;	  //从内核第一次处理时间中断后开始至今的滴哒数,内核态和用户态总共的嘀哒数
+
+   if (cur_thread->ticks == 0) {	  // 若进程时间片用完就开始调度新的进程上cpu
+      schedule(); 
+   } else {				  // 将当前进程的时间片-1
+      cur_thread->ticks--;
+   }
 }
 
+/* 初始化PIT8253 */
 void timer_init() {
-    printf("timer start to init!\n");
-    uint16_t timer_value = FREQUENCY / IRQ0_FREQUENCY;
-    setup_timer(TIMER_0, RW_MODE_LOW_HIGHT, WORK_MODE_2, NUM_SYS_BIN, timer_value, TIMER_0);
-    register_handler(0x20, intr_timer_handler);
-    printf("timer init done!\n");
-}
-
-uint32_t get_time() {
-    return ticks;
+   put_str("timer_init start\n");
+   /* 设置8253的定时周期,也就是发中断的周期 */
+   frequency_set(CONTRER0_PORT, COUNTER0_NO, READ_WRITE_LATCH, COUNTER_MODE, COUNTER0_VALUE);
+   register_handler(0x20, intr_timer_handler);
+   put_str("timer_init done\n");
 }

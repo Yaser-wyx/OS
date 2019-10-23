@@ -2,37 +2,42 @@
 #include "print.h"
 #include "stdint.h"
 #include "sync.h"
-#include "global.h"
-#include "interrupt.h"
+#include "thread.h"
+static struct lock console_lock;    // 控制台锁
 
-static struct lock console_lock;
-
-//初始化终端
-void console_init() { lock_init(&console_lock, 1); }
-
-//获取终端
-void get_console() { lock_acquire(&console_lock); }
-
-//释放终端
-void release_console() { lock_release(&console_lock); }
-
-//使用终端输出字符串
-void console_printf(char *str) {
-
-    get_console();
-    printf(str);
-    release_console();
+/* 初始化终端 */
+void console_init() {
+  lock_init(&console_lock); 
 }
 
-//使用终端输出字符串
-void console_printInt(unsigned long num) {
-    get_console();
-    printInt(num);
-    release_console();
+/* 获取终端 */
+void console_acquire() {
+   lock_acquire(&console_lock);
 }
 
-void console_putchar(uint8_t c){
-    get_console();
-    put_char(c);
-    release_console();
+/* 释放终端 */
+void console_release() {
+   lock_release(&console_lock);
 }
+
+/* 终端中输出字符串 */
+void console_put_str(char* str) {
+   console_acquire(); 
+   put_str(str); 
+   console_release();
+}
+
+/* 终端中输出字符 */
+void console_put_char(uint8_t char_asci) {
+   console_acquire(); 
+   put_char(char_asci); 
+   console_release();
+}
+
+/* 终端中输出16进制整数 */
+void console_put_int(uint32_t num) {
+   console_acquire(); 
+   put_int(num); 
+   console_release();
+}
+

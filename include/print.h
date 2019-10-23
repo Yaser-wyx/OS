@@ -2,7 +2,8 @@
 #define __LIB_KERNEL_PRINT_H
 #include "stdint.h"
 void put_char(uint8_t char_asci);
-void printf(uint8_t *str);
-void printInt(unsigned long number);
-void set_cursor(uint32_t cursor_pos);  //设置光标位置
+void put_str(char* message);
+void put_int(uint32_t num);	 // 以16进制打印
+void set_cursor(uint32_t cursor_pos);
 #endif
+

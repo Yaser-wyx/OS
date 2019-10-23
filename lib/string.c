@@ -1,111 +1,113 @@
 #include "string.h"
-#include "debug.h"
 #include "global.h"
+#include "debug.h"
 
-/*将字符串从src复制到dist*/
-char* strcpy(char* _dist_, const char* _src_) {
-  ASSERT(_dist_ != NULL && _src_ != NULL);
-  char* dist = _dist_;
-  while ((*_dist_++ = *_src_++)) {
-  }
-  return dist;
+/* 将dst_起始的size个字节置为value */
+void memset(void* dst_, uint8_t value, uint32_t size) {
+   ASSERT(dst_ != NULL);
+   uint8_t* dst = (uint8_t*)dst_;
+   while (size-- > 0)
+      *dst++ = value;
 }
-/*返回字符串的长度*/
-uint32_t strlen(const char* src) {
-  ASSERT(src != NULL);
-  char* index = src;
-  while (*index++) {
-  }
-  return (index - src - 1);
+
+/* 将src_起始的size个字节复制到dst_ */
+void memcpy(void* dst_, const void* src_, uint32_t size) {
+   ASSERT(dst_ != NULL && src_ != NULL);
+   uint8_t* dst = dst_;
+   const uint8_t* src = src_;
+   while (size-- > 0)
+      *dst++ = *src++;
 }
-/* 比较两个字符串,若_dist_中的字符大于_src_中的字符返回1,相等时返回0,否则返回-1.
- */
-int8_t strcmp(const char* _dist_, const char* _src_) {
-  ASSERT(_dist_ != NULL && _src_ != NULL);
-  while (*_dist_ != 0 && *_dist_ == *_src_) {
-    _dist_++;
-    _src_++;
-  }
-  return *_dist_ > *_src_ ? 1 : *_dist_ == *_src_ ? 0 : -1;
+
+/* 连续比较以地址a_和地址b_开头的size个字节,若相等则返回0,若a_大于b_返回+1,否则返回-1 */
+int memcmp(const void* a_, const void* b_, uint32_t size) {
+   const char* a = a_;
+   const char* b = b_;
+   ASSERT(a != NULL || b != NULL);
+   while (size-- > 0) {
+      if(*a != *b) {
+	 return *a > *b ? 1 : -1; 
+      }
+      a++;
+      b++;
+   }
+   return 0;
 }
+
+/* 将字符串从src_复制到dst_ */
+char* strcpy(char* dst_, const char* src_) {
+   ASSERT(dst_ != NULL && src_ != NULL);
+   char* r = dst_;		       // 用来返回目的字符串起始地址
+   while((*dst_++ = *src_++));
+   return r;
+}
+
+/* 返回字符串长度 */
+uint32_t strlen(const char* str) {
+   ASSERT(str != NULL);
+   const char* p = str;
+   while(*p++);
+   return (p - str - 1);
+}
+
+/* 比较两个字符串,若a_中的字符大于b_中的字符返回1,相等时返回0,否则返回-1. */
+int8_t strcmp (const char* a, const char* b) {
+   ASSERT(a != NULL && b != NULL);
+   while (*a != 0 && *a == *b) {
+      a++;
+      b++;
+   }
+/* 如果*a小于*b就返回-1,否则就属于*a大于等于*b的情况。在后面的布尔表达式"*a > *b"中,
+ * 若*a大于*b,表达式就等于1,否则就表达式不成立,也就是布尔值为0,恰恰表示*a等于*b */
+   return *a < *b ? -1 : *a > *b;
+}
+
 /* 从左到右查找字符串str中首次出现字符ch的地址(不是下标,是地址) */
-char* strchr_first(const char* _src_, const char ch) {
-  ASSERT(_src_ != NULL);
-  while (*_src_ != 0 && *_src_ != ch) {
-    _src_++;
-  }
+char* strchr(const char* str, const uint8_t ch) {
+   ASSERT(str != NULL);
+   while (*str != 0) {
+      if (*str == ch) {
+	 return (char*)str;	    // 需要强制转化成和返回值类型一样,否则编译器会报const属性丢失,下同.
+      }
+      str++;
+   }
+   return NULL;
+}
 
-  return *_src_ != ch ? NULL : (char*)_src_;
-}
 /* 从后往前查找字符串str中首次出现字符ch的地址(不是下标,是地址) */
-char* strrchr(const char* _src_, const char ch) {
-  ASSERT(_src_ != NULL);
-  char* last_index_of_char = NULL;
-  while (*_src_ != 0) {
-    if (*_src_ == ch) {
-      last_index_of_char = _src_;
-    }
-    _src_++;
-  }
-  return (char*)last_index_of_char;
+char* strrchr(const char* str, const uint8_t ch) {
+   ASSERT(str != NULL);
+   const char* last_char = NULL;
+   /* 从头到尾遍历一次,若存在ch字符,last_char总是该字符最后一次出现在串中的地址(不是下标,是地址)*/
+   while (*str != 0) {
+      if (*str == ch) {
+	 last_char = str;
+      }
+      str++;
+   }
+   return (char*)last_char;
 }
+
 /* 将字符串src_拼接到dst_后,将回拼接的串地址 */
-char* strcat(char* _dist_, const char* _src_) {
-  ASSERT(_dist_ != NULL && _src_ != NULL);
-  char* dist = _dist_;
-  while (*dist != 0) {
-    dist++;
-  }
-  while (*_src_ != 0) {
-    *dist++ = *_src_++;
-  }
-  return _dist_;
+char* strcat(char* dst_, const char* src_) {
+   ASSERT(dst_ != NULL && src_ != NULL);
+   char* str = dst_;
+   while (*str++);
+   --str;      // 别看错了，--str是独立的一句，并不是while的循环体
+   while((*str++ = *src_++));	 // 当*str被赋值为0时,此时表达式不成立,正好添加了字符串结尾的0.
+   return dst_;
 }
+
 /* 在字符串str中查找指定字符ch出现的次数 */
 uint32_t strchrs(const char* str, uint8_t ch) {
-  ASSERT(str != NULL);
-  uint32_t count = 0;
-  while (*str != 0) {
-    if (*str == ch) {
-      count++;
-    }
-    str++;
-  }
-  return count;
-}
-
-//复制指定字符串到内存dist
-void memset(void* _dist_, uint32_t size, uint32_t value) {
-  ASSERT(_dist_ != NULL);
-  uint8_t* dist = (uint8_t*)_dist_;
-  while (size--) {
-    *dist = value;
-    dist++;
-  }
-}
-//将指定个数的字符串复制到指定位置
-//todo check
-void memcpy(void* _dist_, const void* _src_, uint32_t size) {
-  ASSERT(_dist_ != NULL && _src_ != NULL);
-
-  uint8_t* dist = (uint8_t*)_dist_;
-  uint8_t* src = (uint8_t*)_src_;
-  while (size--) {
-    *dist++ = *src++;
-  }
-}
-
-//比较目标地址与原始地址的内存是否一致,相同返回0，dist>src则返回1，否则返回-1
-int memcmp(const void* _dist_, const void* _src_, uint32_t size) {
-  ASSERT(_dist_ != NULL && _src_ != NULL);
-  uint8_t* dist = (uint8_t*)_dist_;
-  uint8_t* src = (uint8_t*)_src_;
-  while (size--) {
-    if (*dist != *src) {
-      return *dist > *src ? 1 : -1;
-    }
-    dist++;
-    src++;
-  }
-  return 0;
+   ASSERT(str != NULL);
+   uint32_t ch_cnt = 0;
+   const char* p = str;
+   while(*p != 0) {
+      if (*p == ch) {
+	 ch_cnt++;
+      }
+      p++;
+   }
+   return ch_cnt;
 }

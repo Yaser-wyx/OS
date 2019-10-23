@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="OS" targetName="ALL_LIB" />
       <config projectName="OS" targetName="KERNEL" />
+      <config projectName="OS" targetName="ALL_LIB" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -13,16 +13,71 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf4f81d3-3bd0-466d-b19c-1691aefaf500" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/wanyu.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/list.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/stdio.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/syscall-init.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/syscall.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/list.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/print.S" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/stdio.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/user/syscall.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/kernel/kernel.S" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/kernel/switch.S" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/kernel/sync.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/kernel/thread.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/user/syscall-init.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/init.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/init.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/interrupt.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/interrupt.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/kernel.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/kernel.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/print.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/print.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/print_c.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/bitmap.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/bitmap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/console.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/console.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/debug.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/debug.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/global.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/global.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/init.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/init.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/interrupt.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/interrupt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/io.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/io.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/ioqueue.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/ioqueue.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/keyboard.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/keyboard.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/memory.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/memory.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/philosopher.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/print.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/print.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/process.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/process.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/rand.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/stdint.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/stdint.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/string.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/string.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/sync.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/sync.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/thread.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/thread.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/kernel/thread.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/thread.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/thread_list.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/timer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/tss.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/tss.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/bitmap.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/bitmap.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/print.asm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/print.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/rand.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/switch.asm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/sync.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/thread.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/thread_list.c" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/string.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/string.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/device/console.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/console.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/device/ioqueue.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/ioqueue.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/device/keyboard.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/keyboard.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/device/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/timer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/debug.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/debug.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/interrupt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/interrupt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/kernel.asm" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/kernel/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/kernel/memory.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/memory.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/philosopher.c" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/user/process.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/user/process.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/user/tss.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/user/tss.c" afterDir="false" />
     </list>
@@ -51,6 +106,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="OCResolveContextSettings">
+    <option name="configuration" value="0-KERNEL" />
+  </component>
   <component name="ProjectId" id="1RxN7SpAGjoHFBVKS3n6NgziVjq" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -58,7 +116,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="F:/ImageTest" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/include" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -72,7 +130,11 @@
       <recent name="D:\share\OS\lib\kernel" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\share\OS\lib" />
+      <recent name="D:\share\OS\include" />
+      <recent name="D:\share\OS\src\kernel" />
+      <recent name="D:\share\OS\src\user" />
+      <recent name="D:\share\OS\lib\kernel" />
+      <recent name="D:\share\OS\lib\user" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -117,7 +179,11 @@
       <workItem from="1570786652324" duration="43763000" />
       <workItem from="1570974113567" duration="36207000" />
       <workItem from="1571229600479" duration="27186000" />
-      <workItem from="1571460559295" duration="32918000" />
+      <workItem from="1571460559295" duration="35703000" />
+      <workItem from="1571657887191" duration="1450000" />
+      <workItem from="1571661728110" duration="26396000" />
+      <workItem from="1571800819108" duration="9375000" />
+      <workItem from="1571836875147" duration="5134000" />
     </task>
     <task id="LOCAL-00001" summary="调整了代码目录结构">
       <created>1570800489534</created>
@@ -182,7 +248,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571613209077</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="finished c11.">
+      <created>1571652427095</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1571652427095</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,6 +285,7 @@
     <MESSAGE value="添加了哲学家进餐问题的解决方案&#10;增加了rand函数" />
     <MESSAGE value="add keyboard drive.&#10;add io_queue" />
     <MESSAGE value="finished c10." />
-    <option name="LAST_COMMIT_MESSAGE" value="finished c10." />
+    <MESSAGE value="finished c11." />
+    <option name="LAST_COMMIT_MESSAGE" value="finished c11." />
   </component>
 </project>

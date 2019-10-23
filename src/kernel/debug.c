@@ -1,28 +1,18 @@
 #include "debug.h"
-#include "interrupt.h"
 #include "print.h"
-#include "stdint.h"
+#include "interrupt.h"
 
-void print_I(uint8_t *name, int value) {
-    printf(name);
-    printInt(value);
-    printf("\n");
-}
-
-void print_STR(uint8_t *name, char *value) {
-    printf(name);
-    printf(value);
-    printf("\n");
-}
-
-void panic_spin(char *filename, int line, const char *func, const char *condition) {
-    intr_disable();
-    printf("\n\n\n\n!!!!error!!!!\n");
-    print_STR("filename:", filename);
-    print_I("line:", line);
-    print_STR("func:", (char *) func);
-    print_STR("condition:", (char *) condition);
-    while (1) {
-        /* code */
-    }
+/* 打印文件名,行号,函数名,条件并使程序悬停 */
+void panic_spin(char* filename,	       \
+	        int line,	       \
+		const char* func,      \
+		const char* condition) \
+{
+   intr_disable();	// 因为有时候会单独调用panic_spin,所以在此处关中断。
+   put_str("\n\n\n!!!!! error !!!!!\n");
+   put_str("filename:");put_str(filename);put_str("\n");
+   put_str("line:0x");put_int(line);put_str("\n");
+   put_str("function:");put_str((char*)func);put_str("\n");
+   put_str("condition:");put_str((char*)condition);put_str("\n");
+   while(1);
 }
