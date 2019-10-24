@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="OS" targetName="KERNEL" />
       <config projectName="OS" targetName="ALL_LIB" />
+      <config projectName="OS" targetName="KERNEL" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -13,15 +13,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf4f81d3-3bd0-466d-b19c-1691aefaf500" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/include/ide.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/stdio-kernel.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/kernel/stdio-kernel.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/device/ide.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/kernel.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/memory.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/memory.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/syscall.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/syscall.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/syscall.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/syscall.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kernel/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kernel/memory.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/memory.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/user/syscall-init.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/user/syscall-init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/thread.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/thread.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/timer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/device/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/timer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/interrupt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/interrupt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/thread.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/thread.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,7 +59,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/include" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/kernel" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -72,10 +73,10 @@
       <recent name="D:\share\OS\lib\kernel" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\share\OS\lib\kernel" />
       <recent name="D:\share\OS\include" />
       <recent name="D:\share\OS\src\kernel" />
       <recent name="D:\share\OS\src\user" />
-      <recent name="D:\share\OS\lib\kernel" />
       <recent name="D:\share\OS\lib\user" />
     </key>
   </component>
@@ -125,7 +126,7 @@
       <workItem from="1571657887191" duration="1450000" />
       <workItem from="1571661728110" duration="26396000" />
       <workItem from="1571800819108" duration="9375000" />
-      <workItem from="1571836875147" duration="13844000" />
+      <workItem from="1571836875147" duration="20573000" />
     </task>
     <task id="LOCAL-00001" summary="调整了代码目录结构">
       <created>1570800489534</created>
@@ -204,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571843164317</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="finished c12.&#10;start c13.">
+      <created>1571918495780</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1571918495780</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -236,6 +244,7 @@
     <MESSAGE value="finished c10." />
     <MESSAGE value="finished c11." />
     <MESSAGE value="遇到一个无法解决的bug。。。。" />
-    <option name="LAST_COMMIT_MESSAGE" value="遇到一个无法解决的bug。。。。" />
+    <MESSAGE value="finished c12.&#10;start c13." />
+    <option name="LAST_COMMIT_MESSAGE" value="finished c12.&#10;start c13." />
   </component>
 </project>
