@@ -460,9 +460,64 @@ void vaddr_remove(enum pool_flags poolFlags, void *vaddr, uint32_t pg_cnt) {
         virtualAddr = &running_thread()->userprog_vaddr;
     }
     uint32_t v_bit_idx = ((uint32_t) vaddr - virtualAddr->vaddr_start) / PG_SIZE;
-    for (int index = v_bit_idx; index < v_bit_idx + pg_cnt; ++index) {
+    int index;
+    for (index = v_bit_idx; index < v_bit_idx + pg_cnt; ++index) {
         bitmap_set(&virtualAddr->vaddr_bitmap, index, 0);
     }
+}
+
+//释放以虚拟地址为起点的cnt个物理页框
+void mfree_page(enum pool_flags poolFlags, void *addr, uint32_t pg_cnt) {
+
+    vaddr_remove(poolFlags, addr, pg_cnt);//释放虚拟页表
+    while (pg_cnt--) {
+        pfree(addr_v2p((uint32_t) addr));//释放物理页表
+        page_table_pte_remove((uint32_t) addr);//删除pte
+        addr += PG_SIZE;
+    }
+}
+
+//清除ptr内存指针指向的内存区域
+void sys_free(void *ptr) {
+    ASSERT(ptr != NULL)
+
+    enum pool_flags poolFlags;
+    struct pool *mem_pool;
+    if (addr_v2p((uint32_t) ptr) >= user_pool.phy_addr_start) {
+        poolFlags = PF_USER;
+        mem_pool = &user_pool;
+    } else {
+        poolFlags = PF_KERNEL;
+        mem_pool = &kernel_pool;
+    }
+    struct mem_block *block = (struct mem_block *) ptr;
+    //先读取该内存区域的元信息
+    struct arena *arena = block2arena(block);
+    lock_acquire(&mem_pool->lock);
+    if (arena->large) {
+        //如果是页框
+        mfree_page(poolFlags, arena, arena->cnt);
+    } else {
+        //如果是小内存块
+        ASSERT(block != NULL)
+        list_append(&arena->desc->free_list, &block->free_elem);
+        //判断该arena仓库是否已经空了
+        arena->cnt++;//仓库剩余内存块+1
+        if (arena->cnt == arena->desc->blocks_per_arena) {
+            //如果仓库剩余的内存块个数等于该仓库总的内存块个数
+            //回收整个仓库的内存空间
+            int index;
+            for (index = 0; index < arena->desc->blocks_per_arena; ++index) {
+                struct mem_block *memBlock = arena2block(arena, index);
+                ASSERT(elem_find(&arena->desc->free_list, &memBlock->free_elem));
+                list_remove(&memBlock->free_elem);
+            }
+            mfree_page(poolFlags, arena, 1);
+        }
+    }
+    lock_release(&mem_pool->lock);
+
+
 }
 
 /* 内存管理部分初始化入口 */
