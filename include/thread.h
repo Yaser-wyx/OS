@@ -6,6 +6,8 @@
 #include "bitmap.h"
 #include "memory.h"
 
+#define MAX_OPEN_FILES 8
+
 /* 自定义通用函数类型,它将在很多线程函数中做为形参类型 */
 typedef void thread_func(void *);
 
@@ -88,6 +90,8 @@ struct task_struct {
 /* 此任务自上cpu运行后至今占用了多少cpu嘀嗒数,
  * 也就是此任务执行了多久*/
     uint32_t elapsed_ticks;
+
+    int32_t fd_table[MAX_OPEN_FILES];//文件描述符数组
 
 /* general_tag的作用是用于线程在一般的队列中的结点 */
     struct list_elem general_tag;

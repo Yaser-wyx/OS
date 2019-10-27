@@ -8,7 +8,8 @@
 #include "stdint.h"
 #include "sync.h"
 #include "bitmap.h"
-
+#include "fs.h"
+#include "super_block.h"
 /* 分区结构 */
 struct partition {
     uint32_t start_lba;		 // 起始扇区
@@ -41,5 +42,11 @@ struct ide_channel {
     struct semaphore disk_done;	 // 用于阻塞、唤醒驱动程序
     struct disk devices[2];	 // 一个通道上连接两个硬盘，一主一从
 };
-
+void intr_hd_handler(uint8_t irq_no);
+void ide_init(void);
+extern uint8_t channel_cnt;
+extern struct ide_channel channels[];
+extern struct list partition_list;
+void ide_read(struct disk* hd, uint32_t lba, void* buf, uint32_t sec_cnt);
+void ide_write(struct disk* hd, uint32_t lba, void* buf, uint32_t sec_cnt);
 #endif //OS_IDE_H

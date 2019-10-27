@@ -16,7 +16,7 @@ OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/init.o $(BUILD_DIR)/interrupt.o \
       $(BUILD_DIR)/switch.o $(BUILD_DIR)/console.o $(BUILD_DIR)/sync.o \
       $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/ioqueue.o $(BUILD_DIR)/tss.o \
       $(BUILD_DIR)/process.o $(BUILD_DIR)/syscall.o $(BUILD_DIR)/syscall-init.o \
-      $(BUILD_DIR)/stdio.o
+      $(BUILD_DIR)/stdio.o $(BUILD_DIR)/ide.o $(BUILD_DIR)/stdio-kernel.o $(BUILD_DIR)/fs.o
 
 ##############     c代码编译     ###############
 $(BUILD_DIR)/main.o: src/kernel/main.c include/print.h \
@@ -106,6 +106,22 @@ $(BUILD_DIR)/syscall-init.o: src/user/syscall-init.c include/syscall-init.h \
 
 $(BUILD_DIR)/stdio.o: lib/stdio.c include/stdio.h include/stdint.h include/interrupt.h \
     	include/stdint.h include/global.h include/string.h include/syscall.h include/print.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/ide.o: src/device/ide.c include/ide.h include/stdint.h include/sync.h \
+    	include/list.h include/global.h include/thread.h include/bitmap.h \
+     	include/memory.h include/io.h include/stdio.h include/stdint.h include/stdio-kernel.h \
+       	include/interrupt.h include/debug.h include/console.h include/timer.h include/string.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/stdio-kernel.o: lib/kernel/stdio-kernel.c include/stdio-kernel.h include/stdint.h \
+    	include/print.h include/stdio.h include/stdint.h include/console.h include/global.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/fs.o: src/fs/fs.c include/fs.h include/stdint.h include/ide.h include/sync.h include/list.h \
+   	include/global.h include/thread.h include/bitmap.h include/memory.h include/super_block.h \
+	include/inode.h include/dir.h include/stdio-kernel.h include/string.h include/stdint.h include/debug.h \
+       	include/interrupt.h include/print.h
 	$(CC) $(CFLAGS) $< -o $@
 ##############    汇编代码编译    ###############
 $(BUILD_DIR)/kernel.o: src/kernel/kernel.S

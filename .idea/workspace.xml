@@ -13,15 +13,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf4f81d3-3bd0-466d-b19c-1691aefaf500" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/include/ide.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/stdio-kernel.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/kernel/stdio-kernel.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/device/ide.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/dir.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/fs.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/inode.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/include/super_block.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/fs/fs.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/fs/inode.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/init.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/init.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/interrupt.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/interrupt.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/kernel.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/kernel.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/main.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/global.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/global.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/ide.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/ide.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/io.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/io.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/thread.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/thread.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/timer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/device/timer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/timer.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kernel/interrupt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/interrupt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/kernel/stdio-kernel.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/kernel/stdio-kernel.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/stdio.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/stdio.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/device/ide.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/device/ide.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/kernel/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/kernel/thread.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/kernel/thread.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -59,25 +72,25 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/kernel" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../elephant/code/c14" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\share\OS\include" />
-      <recent name="D:\share\OS\src" />
-      <recent name="D:\share\OS\boot" />
-      <recent name="D:\share\OS\lib\kernel" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\share\OS\lib\kernel" />
       <recent name="D:\share\OS\include" />
       <recent name="D:\share\OS\src\kernel" />
       <recent name="D:\share\OS\src\user" />
       <recent name="D:\share\OS\lib\user" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\share\OS\include" />
+      <recent name="D:\share\OS\src" />
+      <recent name="D:\share\OS\boot" />
+      <recent name="D:\share\OS\lib\kernel" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -126,7 +139,8 @@
       <workItem from="1571657887191" duration="1450000" />
       <workItem from="1571661728110" duration="26396000" />
       <workItem from="1571800819108" duration="9375000" />
-      <workItem from="1571836875147" duration="20573000" />
+      <workItem from="1571836875147" duration="37618000" />
+      <workItem from="1572073221810" duration="27858000" />
     </task>
     <task id="LOCAL-00001" summary="调整了代码目录结构">
       <created>1570800489534</created>
@@ -212,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571918495780</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="write hd device.">
+      <created>1571925959272</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1571925959272</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,6 +266,7 @@
     <MESSAGE value="finished c11." />
     <MESSAGE value="遇到一个无法解决的bug。。。。" />
     <MESSAGE value="finished c12.&#10;start c13." />
-    <option name="LAST_COMMIT_MESSAGE" value="finished c12.&#10;start c13." />
+    <MESSAGE value="write hd device." />
+    <option name="LAST_COMMIT_MESSAGE" value="write hd device." />
   </component>
 </project>

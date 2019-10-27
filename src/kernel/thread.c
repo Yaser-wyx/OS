@@ -78,6 +78,17 @@ void init_thread(struct task_struct *pthread, char *name, int prio) {
     pthread->elapsed_ticks = 0;
     pthread->pgdir = NULL;
     pthread->stack_magic = 0x19870916;      // 自定义的魔数
+
+    uint8_t idx = 0;
+    while (idx < 8) {
+        if (idx > 2) {
+            pthread->fd_table[idx] = -1;
+        } else {
+            pthread->fd_table[idx] = idx;
+        }
+        idx++;
+    }
+
 }
 
 /* 创建一优先级为prio的线程,线程名为name,线程所执行的函数是function(func_arg) */
