@@ -16,7 +16,8 @@ OBJS = $(BUILD_DIR)/main.o $(BUILD_DIR)/init.o $(BUILD_DIR)/interrupt.o \
       $(BUILD_DIR)/switch.o $(BUILD_DIR)/console.o $(BUILD_DIR)/sync.o \
       $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/ioqueue.o $(BUILD_DIR)/tss.o \
       $(BUILD_DIR)/process.o $(BUILD_DIR)/syscall.o $(BUILD_DIR)/syscall-init.o \
-      $(BUILD_DIR)/stdio.o $(BUILD_DIR)/ide.o $(BUILD_DIR)/stdio-kernel.o $(BUILD_DIR)/fs.o
+      $(BUILD_DIR)/stdio.o $(BUILD_DIR)/ide.o $(BUILD_DIR)/stdio-kernel.o $(BUILD_DIR)/fs.o \
+      $(BUILD_DIR)/inode.o $(BUILD_DIR)/file.o $(BUILD_DIR)/dir.o
 
 ##############     c代码编译     ###############
 $(BUILD_DIR)/main.o: src/kernel/main.c include/print.h \
@@ -122,6 +123,24 @@ $(BUILD_DIR)/fs.o: src/fs/fs.c include/fs.h include/stdint.h include/ide.h inclu
    	include/global.h include/thread.h include/bitmap.h include/memory.h include/super_block.h \
 	include/inode.h include/dir.h include/stdio-kernel.h include/string.h include/stdint.h include/debug.h \
        	include/interrupt.h include/print.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/inode.o: src/fs/inode.c include/inode.h include/stdint.h include/list.h \
+    	include/global.h include/fs.h include/ide.h include/sync.h include/thread.h \
+     	include/bitmap.h include/memory.h include/file.h include/debug.h \
+      	include/interrupt.h include/stdio-kernel.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/file.o: src/fs/file.c include/file.h include/stdint.h include/ide.h include/sync.h \
+    	include/list.h include/global.h include/thread.h include/bitmap.h \
+     	include/memory.h include/fs.h include/inode.h include/dir.h include/stdio-kernel.h \
+      	include/debug.h include/interrupt.h
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/dir.o: src/fs/dir.c include/dir.h include/stdint.h include/inode.h include/list.h \
+    	include/global.h include/ide.h include/sync.h include/thread.h \
+     	include/bitmap.h include/memory.h include/fs.h include/file.h \
+      	include/stdio-kernel.h include/debug.h include/interrupt.h
 	$(CC) $(CFLAGS) $< -o $@
 ##############    汇编代码编译    ###############
 $(BUILD_DIR)/kernel.o: src/kernel/kernel.S
